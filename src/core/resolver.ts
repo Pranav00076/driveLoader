@@ -65,6 +65,7 @@ async function probeCandidateUrl(url: string, timeoutMs: number): Promise<boolea
     // Browser Image preloading test
     if (typeof window !== 'undefined' && typeof window.Image !== 'undefined') {
       const img = new window.Image();
+      img.referrerPolicy = 'no-referrer';
       img.onload = () => {
         if (!settled) {
           settled = true;

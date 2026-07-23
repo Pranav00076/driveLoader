@@ -41,7 +41,7 @@ export const DriveImage = forwardRef<DriveImageRef, DriveImageProps>(function Dr
     lazy: lazyProp,
     fade: fadeProp,
     crossOrigin,
-    referrerPolicy,
+    referrerPolicy = 'no-referrer',
     onLoad,
     onError,
     onResolveSuccess,
