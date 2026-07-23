@@ -94,3 +94,50 @@ export class CacheError extends DriveLoaderError {
     this.name = 'CacheError';
   }
 }
+
+/**
+ * Thrown when an input string is not a valid Google Drive Folder URL or Folder ID.
+ */
+export class InvalidFolderError extends DriveLoaderError {
+  public readonly inputFolder: string;
+
+  constructor(inputFolder: string, message?: string) {
+    const formattedMessage =
+      message ||
+      `Invalid Google Drive Folder URL or Folder ID format: "${inputFolder}". Expected a valid Google Drive folder link (e.g. drive.google.com/drive/folders/FOLDER_ID) or 25+ character ID.`;
+    super(formattedMessage, 'INVALID_FOLDER', { inputFolder });
+    this.name = 'InvalidFolderError';
+    this.inputFolder = inputFolder;
+  }
+}
+
+/**
+ * Thrown when an API key is required for Google Drive folder operations but was omitted.
+ */
+export class ApiKeyMissingError extends DriveLoaderError {
+  constructor() {
+    super(
+      `Google Drive API Key missing. Folder loading requires a valid Google API Key passed via the apiKey option.`,
+      'API_KEY_MISSING',
+    );
+    this.name = 'ApiKeyMissingError';
+  }
+}
+
+/**
+ * Thrown when fetching folder files or metadata fails from the Google Drive REST API.
+ */
+export class FolderLoadError extends DriveLoaderError {
+  public readonly folderId: string;
+  public readonly statusCode?: number;
+
+  constructor(folderId: string, message: string, statusCode?: number) {
+    super(`Failed to load Google Drive folder "${folderId}": ${message}`, 'FOLDER_LOAD_FAILED', {
+      folderId,
+      statusCode,
+    });
+    this.name = 'FolderLoadError';
+    this.folderId = folderId;
+    this.statusCode = statusCode;
+  }
+}

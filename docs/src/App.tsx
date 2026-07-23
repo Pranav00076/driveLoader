@@ -7,13 +7,20 @@ import {
   getCacheStats,
   clearCache,
   resolveDriveImages,
-  extractFileId,
-  isGoogleDriveUrl,
+  loadFolderAssets,
+  extractFolderId,
+  isGoogleDriveFolder,
 } from '../../src/index.js';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'sandbox' | 'docs' | 'cache' | 'batch' | 'troubleshoot'>('sandbox');
+  const [activeTab, setActiveTab] = useState<'sandbox' | 'folder' | 'batch' | 'cache' | 'docs' | 'troubleshoot'>('sandbox');
   const [inputUrl, setInputUrl] = useState('https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view');
+  const [folderInput, setFolderInput] = useState('https://drive.google.com/drive/folders/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs');
+  const [folderApiKey, setFolderApiKey] = useState('');
+  const [folderResult, setFolderResult] = useState<any | null>(null);
+  const [folderLoading, setFolderLoading] = useState(false);
+  const [folderError, setFolderError] = useState<string | null>(null);
+
   const [stats, setStats] = useState(getCacheStats());
   const [batchInput, setBatchInput] = useState(
     `https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view\nhttps://drive.google.com/open?id=1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs\n1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs`,
@@ -42,6 +49,29 @@ export default function App() {
     setBatchResults(res);
     setBatchLoading(false);
     setStats(getCacheStats());
+  };
+
+  const handleLoadFolder = async () => {
+    if (!folderApiKey) {
+      setFolderError('Please enter a Google Drive API Key.');
+      return;
+    }
+    setFolderLoading(true);
+    setFolderError(null);
+    try {
+      const res = await loadFolderAssets({
+        folderUrl: folderInput,
+        apiKey: folderApiKey,
+        pageSize: 20,
+      });
+      setFolderResult(res);
+      setStats(getCacheStats());
+    } catch (err) {
+      setFolderError(err instanceof Error ? err.message : String(err));
+      setFolderResult(null);
+    } finally {
+      setFolderLoading(false);
+    }
   };
 
   return (
@@ -82,13 +112,14 @@ export default function App() {
               <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.025em' }}>
                 @driveloader/react
               </h1>
-              <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>v1.0.0 • Production Ready</span>
+              <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>v1.0.1 • Folder & Image Support</span>
             </div>
           </div>
 
           <nav style={{ display: 'flex', gap: '0.5rem' }}>
             {[
-              { id: 'sandbox', label: 'Interactive Sandbox' },
+              { id: 'sandbox', label: 'Single Image' },
+              { id: 'folder', label: 'Folder Loader' },
               { id: 'batch', label: 'Batch Resolution' },
               { id: 'cache', label: 'Cache & Metrics' },
               { id: 'docs', label: 'API Reference' },
@@ -138,13 +169,13 @@ export default function App() {
                 marginBottom: '1rem',
               }}
             >
-              Zero-Config Google Drive Image Engine for React 18 & 19
+              Zero-Config Google Drive Engine for Images & Folders
             </span>
             <h2 style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.03em' }}>
-              Never Debug Broken Google Drive Links Again
+              Load Google Drive Images & Public Folders Seamlessly
             </h2>
             <p style={{ fontSize: '1.125rem', color: '#9ca3af', lineHeight: 1.6, margin: 0 }}>
-              Automatic file ID extraction, candidate CDN probing, endpoint learning, request coalescing,
+              Automatic link resolution, folder asset listing, endpoint learning, request coalescing,
               and memory caching inside one lightweight, high-performance package.
             </p>
           </div>
@@ -243,20 +274,6 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-
-                <h4 style={{ fontSize: '0.9375rem', margin: '1.25rem 0 0.5rem' }}>Recommendations:</h4>
-                <ul style={{ paddingLeft: '1.25rem', color: '#9ca3af', fontSize: '0.875rem', margin: 0 }}>
-                  {diag.recommendations.map((rec, i) => (
-                    <li key={i} style={{ marginBottom: '0.35rem' }}>
-                      {rec}
-                    </li>
-                  ))}
-                  {diag.warnings.map((warn, i) => (
-                    <li key={i} style={{ color: '#f87171', marginBottom: '0.35rem' }}>
-                      ⚠️ {warn}
-                    </li>
-                  ))}
-                </ul>
               </div>
 
               {/* Right Column: Live Render Playground */}
@@ -294,27 +311,107 @@ export default function App() {
                     style={{ maxWidth: '100%', maxHeight: '350px', borderRadius: '8px' }}
                   />
                 </div>
-
-                <h4 style={{ margin: '1.5rem 0 0.5rem', fontSize: '0.9375rem' }}>JSX Code Snippet:</h4>
-                <pre
-                  style={{
-                    backgroundColor: '#0b0f19',
-                    border: '1px solid #1f2937',
-                    padding: '1rem',
-                    borderRadius: '8px',
-                    fontFamily: 'JetBrains Mono, monospace',
-                    fontSize: '0.8125rem',
-                    color: '#60a5fa',
-                    overflowX: 'auto',
-                  }}
-                >
-                  {`<DriveImage\n  src="${inputUrl}"\n  alt="Google Drive Image"\n  fade={true}\n  lazy={true}\n/>`}
-                </pre>
               </div>
             </div>
           )}
 
-          {/* TAB 2: BATCH RESOLUTION */}
+          {/* TAB 2: FOLDER LOADER */}
+          {activeTab === 'folder' && (
+            <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.5rem' }}>
+              <h3 style={{ marginTop: 0 }}>Public Google Drive Folder Loader</h3>
+              <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+                Load all media assets from a public Google Drive folder using official Google Drive API v3.
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', fontSize: '0.875rem' }}>
+                    Folder Share Link / Folder ID:
+                  </label>
+                  <input
+                    type="text"
+                    value={folderInput}
+                    onChange={(e) => setFolderInput(e.target.value)}
+                    placeholder="https://drive.google.com/drive/folders/FOLDER_ID"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#1f2937',
+                      border: '1px solid #374151',
+                      color: '#ffffff',
+                      fontSize: '0.875rem',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', fontSize: '0.875rem' }}>
+                    Google Drive API Key:
+                  </label>
+                  <input
+                    type="text"
+                    value={folderApiKey}
+                    onChange={(e) => setFolderApiKey(e.target.value)}
+                    placeholder="AIzaSy..."
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#1f2937',
+                      border: '1px solid #374151',
+                      color: '#ffffff',
+                      fontSize: '0.875rem',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleLoadFolder}
+                disabled={folderLoading}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                {folderLoading ? 'Loading Folder Assets...' : 'Fetch Folder Assets'}
+              </button>
+
+              {folderError && (
+                <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#7f1d1d', borderRadius: '8px', color: '#fca5a5' }}>
+                  ❌ {folderError}
+                </div>
+              )}
+
+              {folderResult && (
+                <div style={{ marginTop: '1.5rem' }}>
+                  <h4>Folder: {folderResult.folder?.name}</h4>
+                  <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Loaded {folderResult.totalLoaded} media assets.</p>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
+                    {folderResult.assets.map((asset: any) => (
+                      <div key={asset.id} style={{ backgroundColor: '#1f2937', padding: '0.75rem', borderRadius: '8px' }}>
+                        <DriveImage src={asset.resolvedUrl} alt={asset.name} style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '6px' }} />
+                        <div style={{ fontSize: '0.8125rem', marginTop: '0.5rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {asset.name}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{asset.type.toUpperCase()} • {asset.extension}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 3: BATCH RESOLUTION */}
           {activeTab === 'batch' && (
             <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.5rem' }}>
               <h3 style={{ marginTop: 0 }}>Batch Resolution Playground (resolveDriveImages)</h3>
@@ -377,7 +474,7 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 3: CACHE & METRICS */}
+          {/* TAB 4: CACHE & METRICS */}
           {activeTab === 'cache' && (
             <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '1.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
@@ -414,72 +511,34 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 4: API REFERENCE */}
+          {/* TAB 5: API REFERENCE */}
           {activeTab === 'docs' && (
             <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem', lineHeight: 1.7 }}>
               <h3 style={{ marginTop: 0 }}>API Reference</h3>
               
-              <h4>&lt;DriveImage /&gt; Component Props</h4>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-                <thead>
-                  <tr style={{ borderBottom: '1px solid #374151', textAlign: 'left', color: '#9ca3af' }}>
-                    <th style={{ padding: '0.75rem' }}>Prop</th>
-                    <th style={{ padding: '0.75rem' }}>Type</th>
-                    <th style={{ padding: '0.75rem' }}>Default</th>
-                    <th style={{ padding: '0.75rem' }}>Description</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['src', 'string', 'required', 'Google Drive URL or File ID'],
-                    ['alt', 'string', '""', 'Image alt text'],
-                    ['placeholder', 'ReactNode', 'Skeleton', 'Custom element rendered while loading'],
-                    ['fallback', 'ReactNode', 'Error box', 'Custom element rendered on failure'],
-                    ['lazy', 'boolean', 'true', 'IntersectionObserver lazy loading'],
-                    ['fade', 'boolean', 'true', 'Smooth CSS fade-in animation'],
-                    ['cache', 'boolean', 'true', 'Memory cache for resolution result'],
-                  ].map(([prop, type, def, desc], i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #1f2937' }}>
-                      <td style={{ padding: '0.75rem', fontFamily: 'monospace', color: '#60a5fa' }}>{prop}</td>
-                      <td style={{ padding: '0.75rem', fontFamily: 'monospace', color: '#fbbf24' }}>{type}</td>
-                      <td style={{ padding: '0.75rem', color: '#9ca3af' }}>{def}</td>
-                      <td style={{ padding: '0.75rem' }}>{desc}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <h4 style={{ marginTop: '2rem' }}>Core Utility Functions</h4>
+              <h4>Folder Loading APIs</h4>
               <ul style={{ paddingLeft: '1.25rem' }}>
-                <li><code>extractFileId(urlOrId: string): string | null</code></li>
-                <li><code>isGoogleDriveUrl(urlOrId: string): boolean</code></li>
-                <li><code>resolveDriveImage(src: string, options?: ResolveOptions): Promise&lt;ResolveResult&gt;</code></li>
-                <li><code>resolveDriveImages(urls: string[], options?: BatchResolveOptions): Promise&lt;BatchResolveResult&gt;</code></li>
-                <li><code>analyzeDriveUrl(url: string): UrlDiagnostics</code></li>
-                <li><code>getCacheStats(): CacheStats</code></li>
-                <li><code>clearCache(): void</code></li>
+                <li><code>extractFolderId(urlOrId: string): string | null</code></li>
+                <li><code>isGoogleDriveFolder(urlOrId: string): boolean</code></li>
+                <li><code>loadFolderAssets(options: LoadFolderOptions): Promise&lt;FolderLoadResult&gt;</code></li>
+                <li><code>useDriveFolder(options: LoadFolderOptions): UseDriveFolderResult</code></li>
+                <li><code>&lt;DriveGallery folderUrl="..." apiKey="..." /&gt;</code></li>
               </ul>
             </div>
           )}
 
-          {/* TAB 5: TROUBLESHOOTING */}
+          {/* TAB 6: TROUBLESHOOTING */}
           {activeTab === 'troubleshoot' && (
             <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem', lineHeight: 1.7 }}>
-              <h3 style={{ marginTop: 0 }}>Troubleshooting & Common Google Drive Issues</h3>
+              <h3 style={{ marginTop: 0 }}>Troubleshooting & Google API Key Setup</h3>
               
               <div style={{ marginBottom: '1.5rem' }}>
-                <h4 style={{ color: '#f87171' }}>1. PrivateFileError: File permissions restricted</h4>
+                <h4>Setting up a Google Drive API Key</h4>
                 <p style={{ color: '#9ca3af', fontSize: '0.9375rem' }}>
-                  Google Drive images will fail to load if permissions are restricted to "Restricted / Only invited people".
-                  <br />
-                  <strong>Fix:</strong> Open Google Drive &rarr; Share &rarr; General access &rarr; Select <strong>"Anyone with the link can view"</strong>.
-                </p>
-              </div>
-
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h4 style={{ color: '#f87171' }}>2. ResolutionFailedError: All endpoints failed</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9375rem' }}>
-                  Occurs if the file ID is deleted, or if the uploaded file is a PDF/DOCX rather than a raster/vector image file.
+                  1. Go to Google Cloud Console &rarr; APIs & Services &rarr; Credentials.<br />
+                  2. Click Create Credentials &rarr; API Key.<br />
+                  3. Enable Google Drive API in API Library.<br />
+                  4. Restrict key HTTP referrers to your web application domain.
                 </p>
               </div>
             </div>

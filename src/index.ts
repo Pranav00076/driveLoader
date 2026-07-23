@@ -1,6 +1,6 @@
 /**
  * @driveloader/react
- * The definitive React library for loading, caching, resolving, and diagnosing Google Drive hosted images.
+ * The definitive React library for loading, caching, resolving, and diagnosing Google Drive hosted images and public folders.
  */
 
 // Components
@@ -15,15 +15,19 @@ export type { DriveLoaderProviderProps } from './context/DriveLoaderContext.js';
 // Hooks
 export { useDriveImage } from './hooks/useDriveImage.js';
 export type { UseDriveImageResult } from './hooks/useDriveImage.js';
+export { useDriveFolder } from './hooks/useDriveFolder.js';
 
 // Core Utilities
 export {
   extractFileId,
   isGoogleDriveUrl,
   detectUrlFormat,
+  extractFolderId,
+  isGoogleDriveFolder,
   generateCandidateUrls,
   resolveDriveImage,
   resolveDriveImages,
+  loadFolderAssets,
   analyzeDriveUrl,
   prefetch,
   clearCache,
@@ -39,6 +43,9 @@ export {
   ResolutionFailedError,
   NoCandidateUrlsError,
   CacheError,
+  InvalidFolderError,
+  ApiKeyMissingError,
+  FolderLoadError,
 } from './errors/DriveLoaderError.js';
 
 // Types
@@ -55,4 +62,9 @@ export type {
   DriveImageProps,
   DriveGalleryProps,
   DriveGalleryItem,
+  DriveFolderMetadata,
+  DriveAsset,
+  LoadFolderOptions,
+  FolderLoadResult,
+  UseDriveFolderResult,
 } from './types/index.js';

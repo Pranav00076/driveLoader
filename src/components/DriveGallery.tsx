@@ -1,29 +1,42 @@
 import React from 'react';
 import { DriveImage } from './DriveImage.js';
-import type { DriveGalleryProps, DriveGalleryItem } from '../types/index.js';
+import { useDriveFolder } from '../hooks/useDriveFolder.js';
+import type { DriveGalleryProps, DriveAsset } from '../types/index.js';
 
 /**
  * DriveGallery Component
  *
- * A lightweight, responsive grid gallery for displaying collections of Google Drive images.
- * Automatically resolves all image links, supports responsive column layouts, lazy loading,
+ * A lightweight, responsive grid gallery for displaying collections of Google Drive images or entire public Google Drive folders.
+ * Automatically resolves image links, supports responsive column layouts, lazy loading, folder pagination,
  * custom gap spacing, and click callbacks.
  *
  * @example
  * ```tsx
+ * // Single images mode:
  * <DriveGallery
  *   images={[
  *     'https://drive.google.com/file/d/ID_1/view',
  *     'https://drive.google.com/file/d/ID_2/view',
  *   ]}
  *   columns={{ sm: 1, md: 2, lg: 3 }}
- *   gap="1.5rem"
- *   onImageClick={(item, index) => console.log('Clicked image:', index)}
+ * />
+ *
+ * // Folder mode:
+ * <DriveGallery
+ *   folderUrl="https://drive.google.com/drive/folders/1a2B3c4D5e6F7g8H9i0J"
+ *   apiKey="YOUR_GOOGLE_DRIVE_API_KEY"
+ *   columns={4}
  * />
  * ```
  */
 export const DriveGallery: React.FC<DriveGalleryProps> = ({
   images,
+  folderUrl,
+  folderId,
+  apiKey,
+  mediaTypes,
+  extensions,
+  orderBy,
   columns = 3,
   gap = '1rem',
   className = '',
@@ -33,13 +46,43 @@ export const DriveGallery: React.FC<DriveGalleryProps> = ({
   fallback,
   onImageClick,
 }) => {
-  if (!Array.isArray(images) || images.length === 0) {
-    return null;
+  const isFolderMode = Boolean((folderUrl || folderId) && apiKey);
+
+  const folderResult = useDriveFolder({
+    folderUrl,
+    folderId,
+    apiKey: apiKey || '',
+    mediaTypes,
+    extensions,
+    orderBy,
+  });
+
+  let normalizedItems: Array<{ src: string; alt: string; asset?: DriveAsset }> = [];
+
+  if (isFolderMode) {
+    normalizedItems = folderResult.assets.map((asset) => ({
+      src: asset.resolvedUrl || asset.driveUrl,
+      alt: asset.name || '',
+      asset,
+    }));
+  } else if (Array.isArray(images)) {
+    normalizedItems = images.map((item) =>
+      typeof item === 'string'
+        ? { src: item, alt: '' }
+        : { src: item.src, alt: item.alt || '' },
+    );
   }
 
-  const normalizedItems: DriveGalleryItem[] = images.map((item) =>
-    typeof item === 'string' ? { src: item, alt: '' } : item,
-  );
+  if (normalizedItems.length === 0) {
+    if (isFolderMode && folderResult.loading) {
+      return (
+        <div className={`driveloader-gallery-loading ${className}`.trim()} style={style}>
+          <div className="driveloader-placeholder" style={{ width: '100%', height: '200px' }} />
+        </div>
+      );
+    }
+    return null;
+  }
 
   let gridColsSm = 1;
   let gridColsMd = 2;
@@ -72,7 +115,15 @@ export const DriveGallery: React.FC<DriveGalleryProps> = ({
           key={`${item.src}-${index}`}
           className="driveloader-gallery-item"
           style={{ cursor: onImageClick ? 'pointer' : 'default' }}
-          onClick={() => onImageClick && onImageClick(item, index)}
+          onClick={() => {
+            if (onImageClick) {
+              if (item.asset) {
+                onImageClick(item.asset, index);
+              } else {
+                onImageClick({ src: item.src, alt: item.alt }, index);
+              }
+            }
+          }}
         >
           <DriveImage
             src={item.src}

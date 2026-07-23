@@ -3,9 +3,11 @@ import { getActiveRequestCount } from '../core/resolver.js';
 import type { CacheStats } from '../types/index.js';
 
 export { extractFileId, isGoogleDriveUrl, detectUrlFormat } from '../core/parser.js';
+export { extractFolderId, isGoogleDriveFolder } from '../core/folderParser.js';
 export { generateCandidateUrls } from '../core/candidateGenerator.js';
 export { resolveDriveImage, configureDriveLoader } from '../core/resolver.js';
 export { resolveDriveImages } from '../core/batchResolver.js';
+export { loadFolderAssets } from '../core/folderLoader.js';
 export { analyzeDriveUrl } from '../core/diagnostics.js';
 export { prefetch } from '../core/prefetch.js';
 

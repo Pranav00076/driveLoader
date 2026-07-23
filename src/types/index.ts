@@ -128,6 +128,128 @@ export interface CacheStats {
 }
 
 /**
+ * Metadata representing a Google Drive folder.
+ */
+export interface DriveFolderMetadata {
+  /** Unique Google Drive Folder ID */
+  id: string;
+  /** Name of the folder */
+  name: string;
+  /** Web viewing link for the folder in Google Drive */
+  webViewLink?: string;
+  /** ISO timestamp when the folder was created */
+  createdTime?: string;
+  /** ISO timestamp when the folder was last modified */
+  modifiedTime?: string;
+}
+
+/**
+ * A resolved media asset (image or video) loaded from a Google Drive folder.
+ */
+export interface DriveAsset {
+  /** Unique Google Drive File ID */
+  id: string;
+  /** Original file name */
+  name: string;
+  /** Original MIME type (e.g. 'image/jpeg', 'video/mp4') */
+  mimeType: string;
+  /** Media type classification ('image' or 'video') */
+  type: 'image' | 'video';
+  /** Lowercase file extension (e.g. 'jpg', 'png', 'mp4') */
+  extension: string;
+  /** File size in bytes */
+  size?: number;
+  /** ISO timestamp when the asset was created */
+  createdTime?: string;
+  /** ISO timestamp when the asset was last modified */
+  modifiedTime?: string;
+  /** Standard Google Drive viewing URL */
+  driveUrl: string;
+  /** Resolved working direct CDN URL */
+  resolvedUrl: string;
+  /** Thumbnail URL for preview */
+  thumbnailUrl?: string;
+  /** Google Drive resource kind string */
+  kind?: string;
+  /** Google Drive web view link */
+  webViewLink?: string;
+  /** Icon link for file type */
+  iconLink?: string;
+  /** Raw Drive API thumbnail link */
+  thumbnailLink?: string;
+  /** Array of parent folder IDs */
+  parents?: string[];
+  /** Array of owner display information */
+  owners?: Array<{ displayName?: string; emailAddress?: string }>;
+}
+
+/**
+ * Options for loading assets from a Google Drive folder.
+ */
+export interface LoadFolderOptions extends ResolveOptions {
+  /** Google Drive Folder share link or URL */
+  folderUrl?: string;
+  /** Google Drive Folder ID */
+  folderId?: string;
+  /** Public Google Drive API Key (required for folder list requests) */
+  apiKey: string;
+  /** Media types to include ('image', 'video'). Default: ['image', 'video'] */
+  mediaTypes?: ('image' | 'video')[];
+  /** Array of lowercase file extensions to filter (e.g. ['jpg', 'png', 'mp4']) */
+  extensions?: string[];
+  /** Google Drive API sort ordering (e.g. 'name', 'createdTime', 'modifiedTime', 'quotaBytesUsed', 'folder') */
+  orderBy?: string;
+  /** Maximum assets to fetch per page (1 to 1000). Default: 100 */
+  pageSize?: number;
+  /** Token for fetching next page of assets */
+  pageToken?: string;
+  /** AbortSignal for request cancellation */
+  signal?: AbortSignal;
+  /** Concurrency limit for parallel asset resolution. Default: 4 */
+  concurrency?: number;
+}
+
+/**
+ * Result object returned by loadFolderAssets.
+ */
+export interface FolderLoadResult {
+  /** Folder metadata details, or null if unavailable */
+  folder: DriveFolderMetadata | null;
+  /** Array of resolved media assets */
+  assets: DriveAsset[];
+  /** Token for retrieving next page, or undefined if no more pages */
+  nextPageToken?: string;
+  /** True if additional pages of assets exist */
+  hasMore: boolean;
+  /** Total count of assets loaded in this result */
+  totalLoaded: number;
+}
+
+/**
+ * Result state object returned by the useDriveFolder hook.
+ */
+export interface UseDriveFolderResult {
+  /** Folder metadata details, or null while loading/unresolved */
+  folder: DriveFolderMetadata | null;
+  /** Accumulated array of resolved media assets */
+  assets: DriveAsset[];
+  /** True while folder assets are being loaded or resolved */
+  loading: boolean;
+  /** Error object if folder loading failed, or null */
+  error: Error | null;
+  /** Function to reload folder assets from page 1 */
+  reload: () => void;
+  /** Function to fetch and append the next page of assets */
+  loadMore: () => void;
+  /** True if more pages of assets are available to load */
+  hasMore: boolean;
+  /** Next page pagination token string */
+  nextPageToken?: string;
+  /** Total count of assets accumulated across loaded pages */
+  totalLoaded: number;
+}
+
+/**
  * Global configuration options set via DriveLoaderProvider or configureDriveLoader.
  */
 export interface GlobalConfig {
@@ -181,7 +303,7 @@ export interface DriveImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageE
   fade?: boolean;
   /** Image crossOrigin attribute */
   crossOrigin?: 'anonymous' | 'use-credentials' | '';
-  /** Image referrerPolicy attribute */
+  /** Image referrerPolicy attribute. Default: 'no-referrer' */
   referrerPolicy?: React.HTMLAttributeReferrerPolicy;
   /** Event callback when image successfully loads into DOM */
   onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
@@ -209,8 +331,20 @@ export interface DriveGalleryItem {
  * Props for the DriveGallery React component.
  */
 export interface DriveGalleryProps {
-  /** Array of Google Drive links or image item objects */
-  images: Array<string | DriveGalleryItem>;
+  /** Array of Google Drive links or image item objects (optional if folderUrl / folderId is provided) */
+  images?: Array<string | DriveGalleryItem>;
+  /** Google Drive Folder share link or URL */
+  folderUrl?: string;
+  /** Google Drive Folder ID */
+  folderId?: string;
+  /** Public Google Drive API Key (required when loading via folderUrl / folderId) */
+  apiKey?: string;
+  /** Filter media types when loading from a folder */
+  mediaTypes?: ('image' | 'video')[];
+  /** Filter file extensions when loading from a folder */
+  extensions?: string[];
+  /** Sort ordering when loading from a folder */
+  orderBy?: string;
   /** Column count or responsive column configuration `{ sm?: number, md?: number, lg?: number }` */
   columns?: number | { sm?: number; md?: number; lg?: number };
   /** Grid gap size in pixels or CSS unit string. Default: '1rem' */
@@ -226,5 +360,5 @@ export interface DriveGalleryProps {
   /** Custom fallback for gallery images */
   fallback?: React.ReactNode;
   /** Callback fired when a gallery item is clicked */
-  onImageClick?: (item: DriveGalleryItem, index: number) => void;
+  onImageClick?: (item: DriveGalleryItem | DriveAsset, index: number) => void;
 }
