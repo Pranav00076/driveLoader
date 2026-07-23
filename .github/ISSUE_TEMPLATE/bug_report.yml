@@ -1,0 +1,31 @@
+name: Bug Report
+description: Create a report to help us improve @driveloader/react
+title: '[Bug]: '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue!
+  - type: input
+    id: url
+    attributes:
+      label: Google Drive URL / File ID
+      description: What link or URL format caused the issue?
+      placeholder: 'e.g. https://drive.google.com/file/d/...'
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected vs Actual Behavior
+      description: Describe what happened versus what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics Output
+      description: Output from calling `analyzeDriveUrl(url)` or `getCacheStats()`.
+    validations:
+      required: false
