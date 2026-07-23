@@ -1,6 +1,6 @@
 {
   "name": "@driveloader/react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The definitive React library for loading, caching, and resolving Google Drive hosted images.",
   "publishConfig": {
     "access": "public"

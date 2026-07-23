@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2026-07-23
+
+### Fixed
+- **Referrer Policy & CORB Fix**: Added `referrerPolicy: 'no-referrer'` to candidate image preloader probes and `<DriveImage />` component elements to prevent Chrome Cross-Origin Read Blocking (CORB) and referrer restrictions on Google Drive CDN images (`lh3.googleusercontent.com`).
+
 ## [1.0.0] - 2026-07-23
 
 ### Initial Production Release
