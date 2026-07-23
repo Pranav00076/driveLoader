@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-07-23
+
+### Added
+- **Public Google Drive Folder Support**: Added official Google Drive API v3 folder loading (`loadFolderAssets`, `useDriveFolder`, `extractFolderId`, `isGoogleDriveFolder`).
+- **Folder Metadata & DriveAsset Metadata**: Exposes `DriveFolderMetadata` (`id`, `name`, `webViewLink`, `createdTime`, `modifiedTime`) and enriched `DriveAsset` metadata (`thumbnailUrl`, `kind`, `iconLink`, `parents`, `owners`).
+- **Sorting & Extension Filtering**: Supports Drive API sorting (`orderBy`) and post-filtering by file extension (`extensions: ['jpg', 'png', 'mp4']`).
+- **DriveGallery Folder Mode**: `<DriveGallery folderUrl="..." apiKey="..." />` automatically fetches and renders folder assets in a responsive grid.
+
 ## [1.0.1] - 2026-07-23
 
 ### Fixed
