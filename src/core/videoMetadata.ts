@@ -82,8 +82,9 @@ export async function extractVideoMetadata(
   let duration = 0;
   let width = 1920;
   let height = 1080;
-  let mimeType = 'video/mp4';
-  let size = 0;
+  const mimeType = 'video/mp4';
+  const size = 0;
+
 
   if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
     try {

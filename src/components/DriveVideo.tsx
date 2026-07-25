@@ -218,7 +218,8 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
           poster={posterUrl}
           preload={preload}
           crossOrigin={crossOrigin}
-          {...(referrerPolicy ? ({ referrerPolicy } as any) : {})}
+          {...(referrerPolicy ? ({ referrerPolicy } as Record<string, string>) : {})}
+
           onPlay={onPlay}
 
           onPause={onPause}
