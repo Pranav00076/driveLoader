@@ -1,22 +1,21 @@
 import React from "react";
 import Link from "next/link";
-import { Sparkles, Package, Heart } from "lucide-react";
+import { Package, Heart } from "lucide-react";
 import { GithubIcon } from "@/components/Icons";
-
 
 export function Footer() {
   return (
     <footer className="bg-[#060911] border-t border-gray-800/80 text-gray-400 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 lg:gap-12">
-          {/* Column 1: Brand Info */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
+          {/* Column 1: Brand Overview */}
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 p-0.5 shadow-md shadow-blue-500/20">
-                <div className="w-full h-full bg-[#090d16] rounded-[6px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-blue-400" />
-                </div>
-              </div>
+              <img
+                src="/LogoDL.png"
+                alt="DriveLoader Logo"
+                className="h-8 w-auto object-contain"
+              />
               <span className="text-lg font-bold text-white tracking-tight">DriveLoader</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
@@ -27,17 +26,16 @@ export function Footer() {
                 href="https://github.com/Pranav00076/driveLoader"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-700 transition-colors"
+                className="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-700 transition-colors"
                 title="GitHub Repository"
               >
                 <GithubIcon className="w-4 h-4" />
-
               </a>
               <a
                 href="https://www.npmjs.com/package/@driveloader/react"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-red-400 hover:border-red-500/30 transition-colors"
+                className="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-red-400 hover:border-red-500/30 transition-colors"
                 title="NPM Package"
               >
                 <Package className="w-4 h-4" />
@@ -45,10 +43,10 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Navigation */}
+          {/* Column 2: Documentation Links */}
           <div>
             <h4 className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-4">Documentation</h4>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 text-xs">
               <li><Link href="/docs" className="hover:text-white transition-colors">Introduction</Link></li>
               <li><Link href="/docs/installation" className="hover:text-white transition-colors">Installation</Link></li>
               <li><Link href="/docs/drive-image" className="hover:text-white transition-colors">&lt;DriveImage /&gt;</Link></li>
@@ -58,25 +56,14 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Features & Tools */}
+          {/* Column 3: Platform Tools */}
           <div>
-            <h4 className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-4">Tools & Hubs</h4>
-            <ul className="space-y-2.5">
+            <h4 className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-4">Tools & Reference</h4>
+            <ul className="space-y-2.5 text-xs">
               <li><Link href="/playground" className="hover:text-white transition-colors">Interactive Playground</Link></li>
               <li><Link href="/examples" className="hover:text-white transition-colors">Examples Gallery</Link></li>
               <li><Link href="/api-reference" className="hover:text-white transition-colors">API Reference</Link></li>
-              <li><Link href="/blog" className="hover:text-white transition-colors">Blog Hub</Link></li>
-              <li><Link href="/changelog" className="hover:text-white transition-colors">Changelog (v1.2.0)</Link></li>
-            </ul>
-          </div>
-
-          {/* Column 4: Project Info */}
-          <div>
-            <h4 className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-4">Open Source</h4>
-            <ul className="space-y-2.5">
               <li><a href="https://github.com/Pranav00076/driveLoader/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">MIT License</a></li>
-              <li><a href="https://github.com/Pranav00076/driveLoader/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Contributing</a></li>
-              <li><a href="https://github.com/Pranav00076/driveLoader/issues" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Issue Tracker</a></li>
               <li><a href="https://github.com/Pranav00076/driveLoader/releases" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub Releases</a></li>
             </ul>
           </div>

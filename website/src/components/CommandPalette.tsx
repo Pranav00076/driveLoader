@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, X, BookOpen, Play, Grid, Layers, FileText, History, ArrowRight } from "lucide-react";
+import { Search, X, BookOpen, Play, Grid, Layers, ArrowRight } from "lucide-react";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -28,8 +28,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     { title: "Resolver Diagnostics Playground", category: "Playground", href: "/playground?tab=resolver", icon: Play, keywords: "diagnostics candidates endpoints analysis" },
     { title: "Examples Gallery Recipes", category: "Examples", href: "/examples", icon: Grid, keywords: "code recipes snippets gallery" },
     { title: "Complete API Reference", category: "API Reference", href: "/api-reference", icon: Layers, keywords: "types options exports functions errors" },
-    { title: "DriveLoader Blog", category: "Blog", href: "/blog", icon: FileText, keywords: "articles news tutorial architecture" },
-    { title: "Changelog & Version Timeline", category: "Changelog", href: "/changelog", icon: History, keywords: "v1.2.0 v1.1.0 release notes updates" },
   ];
 
   const filtered = query.trim() === ""
@@ -47,7 +45,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         if (isOpen) {
           onClose();
         } else {
-          // Open triggered by parent state or keyboard event
+          // Trigger handled in Navbar
         }
       }
       if (e.key === "Escape" && isOpen) {
@@ -91,7 +89,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {filtered.length === 0 ? (
             <div className="p-8 text-center text-gray-400 text-sm">
-              No matching commands or pages found for "{query}"
+              No matching commands found for "{query}"
             </div>
           ) : (
             filtered.map((item, index) => {
@@ -120,7 +118,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           )}
         </div>
 
-        {/* Command Palette Footer */}
+        {/* Footer */}
         <div className="p-3 border-t border-gray-800 bg-[#0a0e1a] text-xs text-gray-500 flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <span>Use <kbd className="px-1.5 py-0.5 bg-gray-800 text-gray-400 rounded border border-gray-700">↑</kbd> <kbd className="px-1.5 py-0.5 bg-gray-800 text-gray-400 rounded border border-gray-700">↓</kbd> to navigate</span>
