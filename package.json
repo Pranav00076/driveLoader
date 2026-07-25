@@ -60,7 +60,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,json,md}\"",
     "changeset": "changeset",
-    "prepare": "husky"
+    "prepare": "husky || true"
+
   },
   "peerDependencies": {
     "react": ">=18.0.0",
