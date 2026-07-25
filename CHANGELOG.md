@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-07-26
+
+### Added
+- **First-Class Google Drive Video Support**: Added `<DriveVideo />` component supporting standard HTML5 video attributes (`controls`, `autoPlay`, `muted`, `loop`, `playsInline`, `poster`, `preload`, `crossOrigin`, `referrerPolicy`, `width`, `height`, `className`, `style`).
+- **`useDriveVideo` Hook**: Custom React Hook returning `videoUrl`, `loading`, `error`, `reload`, `metadata`, and `thumbnailUrl`.
+- **Extended Resolver**: `resolveDriveVideo()` extends core resolver infrastructure with zero code duplication, maintaining shared cache, endpoint learning, and request coalescing.
+- **Video Utilities**: Added `isDriveVideo()`, `getVideoThumbnail()`, `extractVideoMetadata()`, and `prefetchVideo()`.
+- **Mixed Media Galleries**: `<DriveGallery />` automatically renders `<DriveVideo />` for video assets and `<DriveImage />` for image assets.
+- **Typed Video Errors**: Added `InvalidVideoError`, `VideoResolutionError`, and `UnsupportedVideoFormatError`.
+
 ## [1.1.0] - 2026-07-23
+
 
 ### Added
 - **Public Google Drive Folder Support**: Added official Google Drive API v3 folder loading (`loadFolderAssets`, `useDriveFolder`, `extractFolderId`, `isGoogleDriveFolder`).
