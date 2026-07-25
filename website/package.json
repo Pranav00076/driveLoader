@@ -4,12 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "cd .. && npm run build",
     "build": "next build",
+
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@driveloader/react": "file:..",
     "@types/canvas-confetti": "^1.9.0",
+
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "lucide-react": "^1.26.0",
