@@ -39,18 +39,48 @@ describe('MemoryCache', () => {
   });
 
   it('should respect LRU capacity limits', () => {
-    cache.set('id1', { imageUrl: 'url1', attemptedEndpoints: [], successfulEndpoint: 'url1', endpointIndex: 0 });
-    cache.set('id2', { imageUrl: 'url2', attemptedEndpoints: [], successfulEndpoint: 'url2', endpointIndex: 0 });
-    cache.set('id3', { imageUrl: 'url3', attemptedEndpoints: [], successfulEndpoint: 'url3', endpointIndex: 0 });
-    cache.set('id4', { imageUrl: 'url4', attemptedEndpoints: [], successfulEndpoint: 'url4', endpointIndex: 0 }); // Evicts id1
+    cache.set('id1', {
+      imageUrl: 'url1',
+      attemptedEndpoints: [],
+      successfulEndpoint: 'url1',
+      endpointIndex: 0,
+    });
+    cache.set('id2', {
+      imageUrl: 'url2',
+      attemptedEndpoints: [],
+      successfulEndpoint: 'url2',
+      endpointIndex: 0,
+    });
+    cache.set('id3', {
+      imageUrl: 'url3',
+      attemptedEndpoints: [],
+      successfulEndpoint: 'url3',
+      endpointIndex: 0,
+    });
+    cache.set('id4', {
+      imageUrl: 'url4',
+      attemptedEndpoints: [],
+      successfulEndpoint: 'url4',
+      endpointIndex: 0,
+    }); // Evicts id1
 
     expect(cache.has('id1')).toBe(false);
     expect(cache.has('id4')).toBe(true);
   });
 
   it('should record endpoint learning metrics', () => {
-    cache.set('id1', { imageUrl: 'url1', attemptedEndpoints: [], successfulEndpoint: 'url1', endpointIndex: 2 });
-    cache.set('id2', { imageUrl: 'url2', attemptedEndpoints: [], successfulEndpoint: 'url2', endpointIndex: 2 });
+    cache.set('id1', {
+      imageUrl: 'url1',
+      attemptedEndpoints: [],
+      successfulEndpoint: 'url1',
+      endpointIndex: 2,
+    });
+    cache.set('id2', {
+      imageUrl: 'url2',
+      attemptedEndpoints: [],
+      successfulEndpoint: 'url2',
+      endpointIndex: 2,
+    });
 
     expect(cache.getPreferredEndpointIndex()).toBe(2);
   });

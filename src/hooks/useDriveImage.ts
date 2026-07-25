@@ -108,7 +108,14 @@ export function useDriveImage(src: string, options?: ResolveOptions): UseDriveIm
     return () => {
       ignore = true;
     };
-  }, [src, reloadTrigger, globalConfig.cacheTTL, globalConfig.retries, globalConfig.timeout, globalConfig.debug]);
+  }, [
+    src,
+    reloadTrigger,
+    globalConfig.cacheTTL,
+    globalConfig.retries,
+    globalConfig.timeout,
+    globalConfig.debug,
+  ]);
 
   const reload = useCallback((_reloadOpts?: { bypassCache?: boolean }) => {
     setReloadTrigger((prev) => prev + 1);

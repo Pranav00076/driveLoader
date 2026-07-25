@@ -4,14 +4,7 @@ import type React from 'react';
  * Recognized Google Drive URL formats.
  */
 export type DriveUrlFormat =
-  | 'file_d'
-  | 'open_id'
-  | 'uc_id'
-  | 'docs_uc'
-  | 'lh3'
-  | 'usercontent'
-  | 'raw_id'
-  | 'unknown';
+  'file_d' | 'open_id' | 'uc_id' | 'docs_uc' | 'lh3' | 'usercontent' | 'raw_id' | 'unknown';
 
 /**
  * Configuration options for image resolution.
@@ -274,7 +267,10 @@ export interface GlobalConfig {
 /**
  * Props for the DriveImage React component.
  */
-export interface DriveImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src' | 'placeholder' | 'onError' | 'onLoad'> {
+export interface DriveImageProps extends Omit<
+  React.ImgHTMLAttributes<HTMLImageElement>,
+  'src' | 'placeholder' | 'onError' | 'onLoad'
+> {
   /** Google Drive link or file ID */
   src: string;
   /** Image alt text */
@@ -406,8 +402,10 @@ export interface ResolveVideoResult {
 /**
  * Props for the DriveVideo React component.
  */
-export interface DriveVideoProps
-  extends Omit<React.VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'placeholder' | 'onError' | 'onLoadedMetadata'> {
+export interface DriveVideoProps extends Omit<
+  React.VideoHTMLAttributes<HTMLVideoElement>,
+  'src' | 'placeholder' | 'onError' | 'onLoadedMetadata'
+> {
   /** Google Drive link or file ID */
   src: string;
   /** Video width */
@@ -453,7 +451,10 @@ export interface DriveVideoProps
   /** Ended event callback */
   onEnded?: (event: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
   /** Loaded metadata event callback */
-  onLoadedMetadata?: (event: React.SyntheticEvent<HTMLVideoElement, Event>, metadata?: DriveVideoMetadata) => void;
+  onLoadedMetadata?: (
+    event: React.SyntheticEvent<HTMLVideoElement, Event>,
+    metadata?: DriveVideoMetadata,
+  ) => void;
   /** Can play event callback */
   onCanPlay?: (event: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
   /** Error event callback */
@@ -487,4 +488,3 @@ export interface UseDriveVideoResult {
   /** Thumbnail image preview URL, or null */
   thumbnailUrl: string | null;
 }
-

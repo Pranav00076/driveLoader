@@ -59,11 +59,13 @@ export const DriveGallery: React.FC<DriveGalleryProps> = ({
     orderBy,
   });
 
-  let normalizedItems: Array<{ src: string; alt: string; isVideo: boolean; asset?: DriveAsset }> = [];
+  let normalizedItems: Array<{ src: string; alt: string; isVideo: boolean; asset?: DriveAsset }> =
+    [];
 
   if (isFolderMode) {
     normalizedItems = folderResult.assets.map((asset) => {
-      const isVid = asset.type === 'video' || isDriveVideo(asset.name) || isDriveVideo(asset.mimeType);
+      const isVid =
+        asset.type === 'video' || isDriveVideo(asset.name) || isDriveVideo(asset.mimeType);
       return {
         src: asset.resolvedUrl || asset.driveUrl,
         alt: asset.name || '',
@@ -159,4 +161,3 @@ export const DriveGallery: React.FC<DriveGalleryProps> = ({
     </div>
   );
 };
-

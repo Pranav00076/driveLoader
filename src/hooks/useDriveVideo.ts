@@ -12,7 +12,6 @@ import type {
   UseDriveVideoResult,
 } from '../types/index.js';
 
-
 /**
  * Custom React Hook for stateful Google Drive video resolution and metadata extraction.
  *
@@ -108,7 +107,14 @@ export function useDriveVideo(src: string, options?: ResolveOptions): UseDriveVi
     return () => {
       ignore = true;
     };
-  }, [src, reloadTrigger, globalConfig.cacheTTL, globalConfig.retries, globalConfig.timeout, globalConfig.debug]);
+  }, [
+    src,
+    reloadTrigger,
+    globalConfig.cacheTTL,
+    globalConfig.retries,
+    globalConfig.timeout,
+    globalConfig.debug,
+  ]);
 
   const reload = useCallback((_reloadOpts?: { bypassCache?: boolean }) => {
     setReloadTrigger((prev) => prev + 1);

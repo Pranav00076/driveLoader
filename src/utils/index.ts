@@ -12,7 +12,6 @@ export { analyzeDriveUrl } from '../core/diagnostics.js';
 export { prefetch, prefetchVideo } from '../core/prefetch.js';
 export { extractVideoMetadata, getVideoThumbnail } from '../core/videoMetadata.js';
 
-
 /**
  * Clears all cached Google Drive image resolutions and resets performance metrics.
  *

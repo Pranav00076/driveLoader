@@ -3,7 +3,6 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useDriveVideo } from '../index.js';
 import { defaultCache } from '../cache/MemoryCache.js';
 
-
 describe('useDriveVideo Hook', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';
   const VALID_URL = `https://drive.google.com/file/d/${VALID_ID}/view`;
@@ -16,7 +15,6 @@ describe('useDriveVideo Hook', () => {
     const { result } = renderHook(() => useDriveVideo(VALID_URL, { timeout: 100 }));
 
     expect(result.current.loading).toBe(true);
-
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);

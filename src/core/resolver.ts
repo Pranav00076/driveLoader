@@ -12,7 +12,6 @@ import { DEFAULT_CONFIG } from '../constants/urls.js';
 import { getVideoThumbnail, extractVideoMetadata } from './videoMetadata.js';
 import type { ResolveOptions, ResolveResult, ResolveVideoResult } from '../types/index.js';
 
-
 // Map for active in-flight request coalescing (deduplication)
 const activeRequestsMap = new Map<string, Promise<ResolveResult>>();
 
@@ -98,7 +97,8 @@ async function probeCandidateUrl(url: string, timeoutMs: number): Promise<boolea
             clearTimeout(timer);
             const contentType = res.headers.get('content-type') || '';
             const isSuccess =
-              res.ok && (contentType.startsWith('image/') || contentType === '' || res.status === 200);
+              res.ok &&
+              (contentType.startsWith('image/') || contentType === '' || res.status === 200);
             resolve(isSuccess);
           }
         })
@@ -205,7 +205,10 @@ export async function resolveDriveImage(
         const candidate = candidates[i]!;
         attemptedEndpoints.push(candidate.url);
 
-        debugLog(debug, `→ Trying candidate endpoint [${i + 1}/${candidates.length}]: ${candidate.url}`);
+        debugLog(
+          debug,
+          `→ Trying candidate endpoint [${i + 1}/${candidates.length}]: ${candidate.url}`,
+        );
 
         let probeSuccess = false;
         for (let attempt = 0; attempt <= retries; attempt++) {
@@ -237,7 +240,10 @@ export async function resolveDriveImage(
       }
 
       if (!successfulResult) {
-        debugLog(debug, `✗ All ${attemptedEndpoints.length} candidate endpoints failed for "${fileId}"`);
+        debugLog(
+          debug,
+          `✗ All ${attemptedEndpoints.length} candidate endpoints failed for "${fileId}"`,
+        );
         throw new ResolutionFailedError(fileId, attemptedEndpoints);
       }
 
@@ -337,4 +343,3 @@ export async function resolveDriveVideo(
     throw err;
   }
 }
-

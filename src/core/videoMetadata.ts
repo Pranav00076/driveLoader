@@ -85,7 +85,6 @@ export async function extractVideoMetadata(
   const mimeType = 'video/mp4';
   const size = 0;
 
-
   if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
     try {
       const probeResult = await new Promise<{ duration: number; width: number; height: number }>(

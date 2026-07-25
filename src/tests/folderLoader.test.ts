@@ -99,7 +99,10 @@ describe('Folder Loader (loadFolderAssets)', () => {
   it('should support extension filtering', async () => {
     const fetchMock = vi.fn().mockImplementation((url: string) => {
       if (url.includes(`/files/${FOLDER_ID}`)) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ id: FOLDER_ID, name: 'Folder' }) });
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: FOLDER_ID, name: 'Folder' }),
+        });
       }
       return Promise.resolve({
         ok: true,

@@ -3,7 +3,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { DriveVideo } from '../index.js';
 import { defaultCache } from '../cache/MemoryCache.js';
 
-
 describe('DriveVideo Component', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';
   const VALID_URL = `https://drive.google.com/file/d/${VALID_ID}/view`;
@@ -13,7 +12,9 @@ describe('DriveVideo Component', () => {
   });
 
   it('should render video container and video element after resolution', async () => {
-    const { container } = render(<DriveVideo src={VALID_URL} controls lazy={false} width={640} height={360} />);
+    const { container } = render(
+      <DriveVideo src={VALID_URL} controls lazy={false} width={640} height={360} />,
+    );
 
     await waitFor(() => {
       const videoEl = container.querySelector('video');
@@ -25,15 +26,7 @@ describe('DriveVideo Component', () => {
 
   it('should pass HTML video attributes correctly', async () => {
     const { container } = render(
-      <DriveVideo
-        src={VALID_URL}
-        controls
-        muted
-        loop
-        playsInline
-        preload="auto"
-        lazy={false}
-      />,
+      <DriveVideo src={VALID_URL} controls muted loop playsInline preload="auto" lazy={false} />,
     );
 
     await waitFor(() => {

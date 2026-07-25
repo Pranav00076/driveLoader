@@ -155,24 +155,23 @@ export const DriveImage = forwardRef<DriveImageRef, DriveImageProps>(function Dr
       style={{
         position: 'relative',
         display: 'inline-block',
-        width: width ? typeof width === 'number' ? `${width}px` : width : 'auto',
-        height: height ? typeof height === 'number' ? `${height}px` : height : 'auto',
+        width: width ? (typeof width === 'number' ? `${width}px` : width) : 'auto',
+        height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
         ...style,
       }}
     >
-      {(isResolving || (!isDomLoaded && imageUrl)) && (
-        effectivePlaceholder ? (
+      {(isResolving || (!isDomLoaded && imageUrl)) &&
+        (effectivePlaceholder ? (
           <>{effectivePlaceholder}</>
         ) : (
           <div
             className="driveloader-placeholder"
             style={{
-              width: width ? typeof width === 'number' ? `${width}px` : width : '100%',
-              height: height ? typeof height === 'number' ? `${height}px` : height : '200px',
+              width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
+              height: height ? (typeof height === 'number' ? `${height}px` : height) : '200px',
             }}
           />
-        )
-      )}
+        ))}
 
       {imageUrl && isVisible && (
         <img
@@ -190,8 +189,8 @@ export const DriveImage = forwardRef<DriveImageRef, DriveImageProps>(function Dr
             fade ? (isDomLoaded ? 'driveloader-image-loaded' : 'driveloader-image-loading') : ''
           }`.trim()}
           style={{
-            width: width ? typeof width === 'number' ? `${width}px` : width : '100%',
-            height: height ? typeof height === 'number' ? `${height}px` : height : 'auto',
+            width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
+            height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
             display: !isDomLoaded && effectivePlaceholder ? 'none' : 'block',
           }}
           {...restImgProps}

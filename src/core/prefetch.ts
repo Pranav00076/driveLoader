@@ -29,7 +29,9 @@ export async function prefetch(src: string, options?: ResolveOptions): Promise<R
  * prefetchVideo('https://drive.google.com/file/d/1A2b3C4d5E6f7G8h9I0j/view');
  * ```
  */
-export async function prefetchVideo(src: string, options?: ResolveOptions): Promise<ResolveVideoResult> {
+export async function prefetchVideo(
+  src: string,
+  options?: ResolveOptions,
+): Promise<ResolveVideoResult> {
   return resolveDriveVideo(src, options);
 }
-

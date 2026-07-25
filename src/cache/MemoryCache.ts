@@ -14,7 +14,6 @@ export interface CacheEntry {
   metadata?: DriveVideoMetadata;
 }
 
-
 /**
  * In-Memory LRU & TTL cache with Endpoint Learning and stats collection.
  */

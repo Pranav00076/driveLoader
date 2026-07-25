@@ -22,8 +22,12 @@ describe('Video Resolution & Utility Engine', () => {
       expect(isDriveVideo('https://example.com/video.mp4')).toBe(true);
       expect(isDriveVideo('https://example.com/clip.webm')).toBe(true);
       expect(isDriveVideo('https://example.com/movie.mov')).toBe(true);
-      expect(isDriveVideo(`https://drive.google.com/file/d/${VALID_ID}/view?type=video`)).toBe(true);
-      expect(isDriveVideo(`https://drive.google.com/file/d/${VALID_ID}/view?mimeType=video/mp4`)).toBe(true);
+      expect(isDriveVideo(`https://drive.google.com/file/d/${VALID_ID}/view?type=video`)).toBe(
+        true,
+      );
+      expect(
+        isDriveVideo(`https://drive.google.com/file/d/${VALID_ID}/view?mimeType=video/mp4`),
+      ).toBe(true);
     });
 
     it('should return false for non-video URLs', () => {
@@ -53,13 +57,18 @@ describe('Video Resolution & Utility Engine', () => {
       expect(metadata.width).toBeGreaterThan(0);
       expect(metadata.height).toBeGreaterThan(0);
       expect(metadata.mimeType).toBe('video/mp4');
-      expect(metadata.thumbnailUrl).toBe(`https://drive.google.com/thumbnail?id=${VALID_ID}&sz=w1000`);
+      expect(metadata.thumbnailUrl).toBe(
+        `https://drive.google.com/thumbnail?id=${VALID_ID}&sz=w1000`,
+      );
     });
   });
 
   describe('resolveDriveVideo', () => {
     it('should resolve Google Drive video share link to direct CDN URL', async () => {
-      const result = await resolveDriveVideo(VALID_URL, { timeout: 100, probeFn: async () => true });
+      const result = await resolveDriveVideo(VALID_URL, {
+        timeout: 100,
+        probeFn: async () => true,
+      });
 
       expect(result).toBeDefined();
       expect(result.videoUrl).toBe(`https://lh3.googleusercontent.com/d/${VALID_ID}`);

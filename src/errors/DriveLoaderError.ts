@@ -77,9 +77,13 @@ export class NoCandidateUrlsError extends DriveLoaderError {
   public readonly fileId: string;
 
   constructor(fileId: string) {
-    super(`No candidate URLs could be generated for Google Drive ID "${fileId}".`, 'NO_CANDIDATES', {
-      fileId,
-    });
+    super(
+      `No candidate URLs could be generated for Google Drive ID "${fileId}".`,
+      'NO_CANDIDATES',
+      {
+        fileId,
+      },
+    );
     this.name = 'NoCandidateUrlsError';
     this.fileId = fileId;
   }
@@ -200,4 +204,3 @@ export class UnsupportedVideoFormatError extends DriveLoaderError {
     }
   }
 }
-

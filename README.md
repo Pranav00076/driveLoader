@@ -8,7 +8,7 @@
 [![build status](https://img.shields.io/github/actions/workflow/status/Pranav00076/driveLoader/ci.yml?branch=main&style=flat-square)](https://github.com/Pranav00076/driveLoader/actions)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 
-**The definitive React library for loading, caching, resolving, and diagnosing Google Drive hosted images and public folders.**
+**The complete Google Drive Media CDN for React applications. Effortlessly load, stream, cache, resolve, and diagnose Google Drive hosted images, videos, and public folders.**
 
 </div>
 
@@ -16,34 +16,34 @@
 
 ## 🌟 Why `@driveloader/react`?
 
-Google Drive link sharing is notoriously tricky. Standard `drive.google.com/file/d/...` or `open?id=...` URLs fail inside `<img src="..." />` tags because they are HTML viewing pages rather than direct image file binaries.
+Google Drive link sharing is notoriously tricky. Standard `drive.google.com/file/d/...` or `open?id=...` URLs fail inside `<img src="..." />` and `<video src="..." />` tags because they point to HTML viewing web pages rather than direct direct CDN file binaries.
 
-**`@driveloader/react` completely solves this problem for both single images and entire public Google Drive folders.**
+**`@driveloader/react` completely solves this problem for images, videos, and entire public Google Drive folders.**
 
-Simply pass **any** Google Drive link or file ID to `<DriveImage src="..." />` or load entire public folders via `useDriveFolder()` / `<DriveGallery folderUrl="..." apiKey="..." />`.
+Simply pass **any** Google Drive link or file ID to `<DriveImage />` or `<DriveVideo />`, or load entire public folders via `useDriveFolder()` / `<DriveGallery />`.
 
 ---
 
 ## 🚀 Key Features
 
-- ✅ **Google Drive Images**: Render Google Drive images with skeletons, lazy loading, and failover endpoints.
-- ✅ **Google Drive Videos**: Stream Google Drive videos using `<DriveVideo />` with poster thumbnails and metadata extraction.
-- ✅ **Mixed Media Galleries**: Responsive `<DriveGallery />` automatically renders images and videos side-by-side.
+- ✅ **Google Drive Images**: Render Google Drive images with skeletons, smooth fade transitions, lazy loading, and failover endpoints.
+- 🎥 **Google Drive Videos**: Stream Google Drive videos using `<DriveVideo />` with poster thumbnails, HTML5 controls, and metadata extraction.
+- 🖼️ **Mixed Media Galleries**: Responsive `<DriveGallery />` automatically detects media types and renders images and videos side-by-side.
+- 📁 **Public Folder Loading**: Fetch all media assets (images & videos) from any public Google Drive folder using official Google Drive API v3.
 - 🧠 **Endpoint Learning**: Automatically remembers working CDN endpoints per file ID and prioritizes them in future resolutions.
-- 📁 **Public Folder Loading**: Load all media assets (images & videos) from a public Google Drive folder using official Google Drive API v3.
 - 🔄 **Pagination & Sorting**: Support for `loadMore()`, page tokens, sorting (`name`, `createdTime`, `modifiedTime`), and extension filtering (`['jpg', 'png', 'mp4']`).
-- ⚡ **Request Coalescing**: Prevents duplicate network requests when rendering multiple instances of the same asset across your app.
-- 📦 **Batch Resolution**: Concurrently resolves arrays of URLs with `resolveDriveImages()` and worker queue controls.
+- ⚡ **Request Coalescing**: Prevents duplicate network requests when rendering multiple instances of the same asset across your application.
+- 📦 **Batch Resolution**: Concurrently resolves arrays of URLs with `resolveDriveImages()` and worker concurrency queue controls.
 - 🔍 **Diagnostics API**: `analyzeDriveUrl(url)` inspects link validity, format variants, TTL, and actionable recommendations.
 - 📊 **Cache Metrics**: Real-time stats (`getCacheStats()`) on hit rates, active requests, and memory usage.
-- 🛡️ **Typed Errors**: Actionable custom error hierarchy (`InvalidDriveUrlError`, `InvalidVideoError`, `VideoResolutionError`, `PrivateFileError`, `ResolutionFailedError`).
+- 🛡️ **Typed Error Hierarchy**: Actionable custom errors (`InvalidDriveUrlError`, `InvalidVideoError`, `VideoResolutionError`, `PrivateFileError`, `ResolutionFailedError`).
 - ⚡ **Zero Runtime Dependencies**: Ultra-lightweight and tree-shakeable.
 
 ---
 
 ## ⚡ Quick Start
 
-### Single Image Component
+### 🖼️ Single Image Component (`DriveImage`)
 
 ```tsx
 import { DriveImage } from '@driveloader/react';
@@ -62,10 +62,10 @@ export function ProfileAvatar() {
 }
 ```
 
-### Single Video Component (`DriveVideo`)
+### 🎥 Single Video Component (`DriveVideo`)
 
 ```tsx
-import { DriveVideo } from "@driveloader/react";
+import { DriveVideo } from '@driveloader/react';
 import '@driveloader/react/styles.css';
 
 export function VideoPlayer({ driveUrl }: { driveUrl: string }) {
@@ -74,6 +74,7 @@ export function VideoPlayer({ driveUrl }: { driveUrl: string }) {
       src={driveUrl}
       controls
       autoPlay={false}
+      muted={false}
       preload="metadata"
       width={640}
       height={360}
@@ -82,10 +83,10 @@ export function VideoPlayer({ driveUrl }: { driveUrl: string }) {
 }
 ```
 
-### Video Resolution Hook (`useDriveVideo`)
+### 🎬 Video Resolution Hook (`useDriveVideo`)
 
 ```tsx
-import { useDriveVideo } from "@driveloader/react";
+import { useDriveVideo } from '@driveloader/react';
 
 function VideoDetails({ driveUrl }: { driveUrl: string }) {
   const { videoUrl, loading, error, metadata, thumbnailUrl } = useDriveVideo(driveUrl);
@@ -95,27 +96,28 @@ function VideoDetails({ driveUrl }: { driveUrl: string }) {
 
   return (
     <div>
-      <video src={videoUrl!} controls poster={thumbnailUrl || undefined} />
+      <video src={videoUrl!} controls poster={thumbnailUrl || undefined} width={640} />
       <p>Duration: {metadata?.duration}s | Dimensions: {metadata?.width}x{metadata?.height}</p>
     </div>
   );
 }
 ```
 
-
 ---
 
 ## 📁 Loading Public Folders (`useDriveFolder`)
 
+Load public Google Drive folder contents with pagination, sorting, and media type filtering.
+
 ```tsx
-import { useDriveFolder, DriveImage } from '@driveloader/react';
+import { useDriveFolder, DriveGallery } from '@driveloader/react';
 
 function FolderGallery({ folderUrl, apiKey }: { folderUrl: string; apiKey: string }) {
   const { folder, assets, loading, error, loadMore, hasMore } = useDriveFolder({
     folderUrl,
     apiKey,
-    mediaTypes: ['image'],
-    extensions: ['jpg', 'png', 'webp'],
+    mediaTypes: ['image', 'video'],
+    extensions: ['jpg', 'png', 'mp4', 'webm'],
     orderBy: 'createdTime desc',
     pageSize: 20,
   });
@@ -126,11 +128,7 @@ function FolderGallery({ folderUrl, apiKey }: { folderUrl: string; apiKey: strin
   return (
     <div>
       <h3>{folder?.name}</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-        {assets.map((asset) => (
-          <DriveImage key={asset.id} src={asset.resolvedUrl} alt={asset.name} />
-        ))}
-      </div>
+      <DriveGallery images={assets.map(a => a.resolvedUrl)} columns={3} gap="1rem" />
       {hasMore && <button onClick={loadMore}>Load More</button>}
     </div>
   );
@@ -139,12 +137,14 @@ function FolderGallery({ folderUrl, apiKey }: { folderUrl: string; apiKey: strin
 
 ---
 
-## 🖼️ Automatic Gallery Folder Mode (`DriveGallery`)
+## 🖼️ Automatic Mixed Media Gallery (`DriveGallery`)
+
+`<DriveGallery />` automatically inspects every asset in folder or array mode, rendering `<DriveVideo />` for video files and `<DriveImage />` for image files.
 
 ```tsx
 import { DriveGallery } from '@driveloader/react';
 
-export function EventPhotoGallery() {
+export function MediaGallery() {
   return (
     <DriveGallery
       folderUrl="https://drive.google.com/drive/folders/1a2B3c4D5e6F7g8H9i0J"
@@ -161,6 +161,8 @@ export function EventPhotoGallery() {
 
 ## 📦 Batch Resolution (`resolveDriveImages`)
 
+Concurrently resolve multiple Google Drive image URLs into working direct CDN links with concurrency worker limits.
+
 ```ts
 import { resolveDriveImages } from '@driveloader/react';
 
@@ -172,7 +174,36 @@ const { results, successful, failed } = await resolveDriveImages([
 
 ---
 
+## 🛠️ Video & Image Utilities
+
+```ts
+import {
+  isDriveVideo,
+  resolveDriveVideo,
+  getVideoThumbnail,
+  extractVideoMetadata,
+  prefetchVideo
+} from '@driveloader/react';
+
+// 1. Check if input URL represents a video asset
+isDriveVideo('https://drive.google.com/file/d/VIDEO_ID/view?type=video'); // => true
+
+// 2. Generate video preview thumbnail URL
+const thumbUrl = getVideoThumbnail('https://drive.google.com/file/d/VIDEO_ID/view');
+
+// 3. Extract video metadata
+const metadata = await extractVideoMetadata('https://drive.google.com/file/d/VIDEO_ID/view');
+console.log(metadata.duration, metadata.width, metadata.height, metadata.mimeType);
+
+// 4. Background prefetch video resolution into memory cache
+await prefetchVideo('https://drive.google.com/file/d/VIDEO_ID/view');
+```
+
+---
+
 ## 🔍 Link Diagnostics API (`analyzeDriveUrl`)
+
+Inspect any Google Drive URL to analyze format variants, TTL, and troubleshooting recommendations.
 
 ```ts
 import { analyzeDriveUrl } from '@driveloader/react';
@@ -187,7 +218,25 @@ console.log(info.recommendations); // ['Verify in Google Drive that access is se
 
 ---
 
+## 📊 Cache Metrics & Management
+
+Inspect cache hit rates, active in-flight requests, and estimated memory usage.
+
+```ts
+import { getCacheStats, clearCache } from '@driveloader/react';
+
+const stats = getCacheStats();
+console.log(`Hit Rate: ${stats.hitRate}% | Cached: ${stats.cachedEntries} | Active: ${stats.activeRequests}`);
+
+// Reset memory cache
+clearCache();
+```
+
+---
+
 ## 🔑 Google Drive API Key Setup for Folders
+
+Folder loading utilizes the official Google Drive API v3.
 
 1. Go to **[Google Cloud Console](https://console.cloud.google.com/)** &rarr; **APIs & Services** &rarr; **Credentials**.
 2. Click **Create Credentials** &rarr; **API Key**.
