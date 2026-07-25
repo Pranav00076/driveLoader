@@ -48,7 +48,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup",
-    "build:docs": "vite build",
+    "build:docs": "npm run build && npm run build --prefix website",
+
+
     "preview:docs": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

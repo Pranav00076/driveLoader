@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #090d16;
+    --foreground: #f3f4f6;
+    --card: #111827;
+    --card-foreground: #f9fafb;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --secondary: #1f2937;
+    --secondary-foreground: #e5e7eb;
+    --muted: #1f2937;
+    --muted-foreground: #9ca3af;
+    --accent: #2563eb;
+    --accent-foreground: #ffffff;
+    --border: #1f2937;
+    --ring: #3b82f6;
+  }
+}
+
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(31, 41, 55, 0.8);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 12px 30px -10px rgba(59, 130, 246, 0.15);
+}
+
+/* Animated gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Hero Glow Background */
+.hero-glow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(37, 99, 235, 0.05) 50%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* DriveLoader internal CSS overrides for website integration */
+.driveloader-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: opacity 0.35s ease-in-out;
+}
+
+.driveloader-image-loading {
+  opacity: 0;
+}
+
+.driveloader-image-loaded {
+  opacity: 1;
+}
+
+.driveloader-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: driveloader-skeleton 1.5s infinite ease-in-out;
+  border-radius: 6px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+@keyframes driveloader-skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.driveloader-fallback {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #451a1a;
+  color: #fca5a5;
+  border: 1px solid #7f1d1d;
+  border-radius: 6px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.driveloader-gallery-grid {
+  display: grid;
+  width: 100%;
+  gap: var(--driveloader-gallery-gap, 1rem);
+  grid-template-columns: repeat(var(--driveloader-gallery-cols, 3), minmax(0, 1fr));
+}
+
+@media (max-width: 768px) {
+  .driveloader-gallery-grid {
+    grid-template-columns: repeat(var(--driveloader-gallery-cols-sm, 1), minmax(0, 1fr));
+  }
+}
+
+.driveloader-video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: opacity 0.35s ease-in-out;
+  border-radius: 6px;
+}
+
+.driveloader-video-loading {
+  opacity: 0;
+}
+
+.driveloader-video-loaded {
+  opacity: 1;
+}
+
+.driveloader-video-container {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
