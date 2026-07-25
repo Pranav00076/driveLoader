@@ -362,3 +362,129 @@ export interface DriveGalleryProps {
   /** Callback fired when a gallery item is clicked */
   onImageClick?: (item: DriveGalleryItem | DriveAsset, index: number) => void;
 }
+
+/**
+ * Metadata associated with a resolved Google Drive video asset.
+ */
+export interface DriveVideoMetadata {
+  /** Video duration in seconds */
+  duration: number;
+  /** Video width in pixels */
+  width: number;
+  /** Video height in pixels */
+  height: number;
+  /** Video MIME type (e.g. 'video/mp4', 'video/webm') */
+  mimeType: string;
+  /** File size in bytes */
+  size: number;
+  /** Thumbnail image URL */
+  thumbnailUrl: string;
+}
+
+/**
+ * Successful video resolution result.
+ */
+export interface ResolveVideoResult {
+  /** Final working direct video CDN URL */
+  videoUrl: string;
+  /** Extracted Google Drive File ID */
+  fileId: string;
+  /** Array of candidate endpoints attempted */
+  attemptedEndpoints: string[];
+  /** The candidate URL template/endpoint that succeeded */
+  successfulEndpoint: string;
+  /** Whether the resolution result was served from cache */
+  fromCache: boolean;
+  /** Whether an endpoint learning priority was applied */
+  learned: boolean;
+  /** Extracted video metadata details */
+  metadata: DriveVideoMetadata;
+  /** Thumbnail preview URL */
+  thumbnailUrl: string;
+}
+
+/**
+ * Props for the DriveVideo React component.
+ */
+export interface DriveVideoProps
+  extends Omit<React.VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'placeholder' | 'onError' | 'onLoadedMetadata'> {
+  /** Google Drive link or file ID */
+  src: string;
+  /** Video width */
+  width?: number | string;
+  /** Video height */
+  height?: number | string;
+  /** Additional CSS class names */
+  className?: string;
+  /** Additional inline CSS styles */
+  style?: React.CSSProperties;
+  /** React element to render while video is resolving/loading */
+  placeholder?: React.ReactNode;
+  /** React element to render if resolution fails */
+  fallback?: React.ReactNode;
+  /** Video controls toggle. Default: true */
+  controls?: boolean;
+  /** Auto play video */
+  autoPlay?: boolean;
+  /** Mute audio playback */
+  muted?: boolean;
+  /** Loop playback */
+  loop?: boolean;
+  /** Play inline on mobile devices */
+  playsInline?: boolean;
+  /** Video poster thumbnail image URL */
+  poster?: string;
+  /** Video preload attribute ('metadata' | 'auto' | 'none'). Default: 'metadata' */
+  preload?: 'metadata' | 'auto' | 'none';
+  /** Cross-origin CORS configuration */
+  crossOrigin?: 'anonymous' | 'use-credentials' | '';
+  /** Referrer policy attribute. Default: 'no-referrer' */
+  referrerPolicy?: React.HTMLAttributeReferrerPolicy;
+  /** Enable memory caching for this video. Default: true */
+  cache?: boolean;
+  /** Enable IntersectionObserver lazy loading. Default: true */
+  lazy?: boolean;
+  /** Enable smooth CSS fade-in animation on load. Default: true */
+  fade?: boolean;
+  /** Playback event callback */
+  onPlay?: (event: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
+  /** Pause event callback */
+  onPause?: (event: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
+  /** Ended event callback */
+  onEnded?: (event: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
+  /** Loaded metadata event callback */
+  onLoadedMetadata?: (event: React.SyntheticEvent<HTMLVideoElement, Event>, metadata?: DriveVideoMetadata) => void;
+  /** Can play event callback */
+  onCanPlay?: (event: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
+  /** Error event callback */
+  onError?: (error: Error) => void;
+  /** Event callback when DriveLoader video resolution completes successfully */
+  onResolveSuccess?: (result: ResolveVideoResult) => void;
+  /** Event callback when DriveLoader video resolution fails */
+  onResolveError?: (error: Error) => void;
+}
+
+/**
+ * Result state object returned by the useDriveVideo hook.
+ */
+export interface UseDriveVideoResult {
+  /** The working direct video CDN URL, or null if loading or failed */
+  videoUrl: string | null;
+  /** Whether resolution or metadata extraction is currently in progress */
+  loading: boolean;
+  /** Error object if video resolution failed, null otherwise */
+  error: Error | null;
+  /** True if video resolution completed successfully */
+  isSuccess: boolean;
+  /** True if video resolution failed */
+  isError: boolean;
+  /** Candidate URLs generated for this Google Drive file ID */
+  candidateUrls: string[];
+  /** Function to trigger manual reload/re-resolution */
+  reload: (options?: { bypassCache?: boolean }) => void;
+  /** Video metadata object, or null while loading/unresolved */
+  metadata: DriveVideoMetadata | null;
+  /** Thumbnail image preview URL, or null */
+  thumbnailUrl: string | null;
+}
+

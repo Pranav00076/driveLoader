@@ -1,4 +1,4 @@
-import type { CacheStats } from '../types/index.js';
+import type { CacheStats, DriveVideoMetadata } from '../types/index.js';
 
 export interface CacheEntry {
   imageUrl: string;
@@ -8,7 +8,12 @@ export interface CacheEntry {
   endpointIndex: number;
   createdAt: number;
   expiresAt: number;
+  mediaType?: 'image' | 'video';
+  videoUrl?: string;
+  thumbnailUrl?: string;
+  metadata?: DriveVideoMetadata;
 }
+
 
 /**
  * In-Memory LRU & TTL cache with Endpoint Learning and stats collection.

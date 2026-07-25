@@ -63,3 +63,27 @@
     grid-template-columns: repeat(var(--driveloader-gallery-cols-sm, 1), minmax(0, 1fr));
   }
 }
+
+.driveloader-video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: opacity 0.35s ease-in-out;
+  border-radius: 6px;
+}
+
+.driveloader-video-loading {
+  opacity: 0;
+}
+
+.driveloader-video-loaded {
+  opacity: 1;
+}
+
+.driveloader-video-container {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+

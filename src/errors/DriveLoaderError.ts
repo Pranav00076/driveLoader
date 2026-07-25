@@ -141,3 +141,63 @@ export class FolderLoadError extends DriveLoaderError {
     this.statusCode = statusCode;
   }
 }
+
+/**
+ * Thrown when an input string is not a valid Google Drive video URL or File ID.
+ */
+export class InvalidVideoError extends DriveLoaderError {
+  public readonly inputUrl: string;
+
+  constructor(inputUrl: string, message?: string) {
+    const formattedMessage =
+      message ||
+      `Invalid Google Drive Video URL or File ID format: "${inputUrl}". Expected a valid Google Drive video link or File ID.`;
+    super(formattedMessage, 'INVALID_VIDEO_URL', { inputUrl });
+    this.name = 'InvalidVideoError';
+    this.inputUrl = inputUrl;
+  }
+}
+
+/**
+ * Thrown when resolving a Google Drive video fails across candidate endpoints.
+ */
+export class VideoResolutionError extends DriveLoaderError {
+  public readonly fileId: string;
+  public readonly attemptedEndpoints: string[];
+
+  constructor(fileId: string, attemptedEndpoints: string[], lastError?: Error) {
+    const formattedMessage =
+      `Failed to resolve video for Google Drive file ID "${fileId}". All ${attemptedEndpoints.length} candidate endpoints failed.` +
+      ` Ensure public sharing is enabled for the video file.`;
+    super(formattedMessage, 'VIDEO_RESOLUTION_FAILED', {
+      fileId,
+      attemptedEndpoints,
+      lastErrorMsg: lastError?.message,
+    });
+    this.name = 'VideoResolutionError';
+    this.fileId = fileId;
+    this.attemptedEndpoints = attemptedEndpoints;
+  }
+}
+
+/**
+ * Thrown when a video format or MIME type is not supported by HTML5 video playback.
+ */
+export class UnsupportedVideoFormatError extends DriveLoaderError {
+  public readonly mimeType?: string;
+  public readonly url?: string;
+
+  constructor(mimeTypeOrUrl: string, message?: string) {
+    const formattedMessage =
+      message ||
+      `Unsupported video format or MIME type: "${mimeTypeOrUrl}". Ensure the video file is formatted as web-compatible MP4, WebM, OGG, or MOV.`;
+    super(formattedMessage, 'UNSUPPORTED_VIDEO_FORMAT', { mimeTypeOrUrl });
+    this.name = 'UnsupportedVideoFormatError';
+    if (mimeTypeOrUrl.includes('/')) {
+      this.mimeType = mimeTypeOrUrl;
+    } else {
+      this.url = mimeTypeOrUrl;
+    }
+  }
+}
+

@@ -5,9 +5,13 @@ import {
   InvalidDriveUrlError,
   NoCandidateUrlsError,
   ResolutionFailedError,
+  InvalidVideoError,
+  VideoResolutionError,
 } from '../errors/DriveLoaderError.js';
 import { DEFAULT_CONFIG } from '../constants/urls.js';
-import type { ResolveOptions, ResolveResult } from '../types/index.js';
+import { getVideoThumbnail, extractVideoMetadata } from './videoMetadata.js';
+import type { ResolveOptions, ResolveResult, ResolveVideoResult } from '../types/index.js';
+
 
 // Map for active in-flight request coalescing (deduplication)
 const activeRequestsMap = new Map<string, Promise<ResolveResult>>();
@@ -271,3 +275,66 @@ export async function resolveDriveImage(
   activeRequestsMap.set(fileId, resolutionPromise);
   return resolutionPromise;
 }
+
+/**
+ * Core function for resolving any Google Drive Video URL or File ID into a direct working video CDN URL.
+ * Reuses existing resolver infrastructure (memory cache, endpoint learning, retry loops, request coalescing).
+ *
+ * @param src - Google Drive URL or File ID string.
+ * @param options - Resolution options.
+ * @returns Promise resolving to a `ResolveVideoResult`.
+ *
+ * @example
+ * ```ts
+ * const result = await resolveDriveVideo('https://drive.google.com/file/d/1A2b3C4d5E6f7G8h9I0j/view');
+ * console.log(result.videoUrl, result.metadata);
+ * ```
+ */
+export async function resolveDriveVideo(
+  src: string,
+  options?: ResolveOptions,
+): Promise<ResolveVideoResult> {
+  const fileId = extractFileId(src);
+  if (!fileId) {
+    throw new InvalidVideoError(src);
+  }
+
+  try {
+    const resolveResult = await resolveDriveImage(src, options);
+    const metadata = await extractVideoMetadata(src, options);
+    const thumbnailUrl = getVideoThumbnail(src, { width: options?.width });
+
+    const videoResult: ResolveVideoResult = {
+      videoUrl: resolveResult.imageUrl,
+      fileId: resolveResult.fileId,
+      attemptedEndpoints: resolveResult.attemptedEndpoints,
+      successfulEndpoint: resolveResult.successfulEndpoint,
+      fromCache: resolveResult.fromCache,
+      learned: resolveResult.learned,
+      metadata,
+      thumbnailUrl,
+    };
+
+    const useCache = options?.cache !== false;
+    if (useCache) {
+      const cached = defaultCache.get(fileId);
+      if (cached) {
+        cached.mediaType = 'video';
+        cached.videoUrl = videoResult.videoUrl;
+        cached.thumbnailUrl = thumbnailUrl;
+        cached.metadata = metadata;
+      }
+    }
+
+    return videoResult;
+  } catch (err) {
+    if (err instanceof InvalidDriveUrlError) {
+      throw new InvalidVideoError(src);
+    }
+    if (err instanceof ResolutionFailedError) {
+      throw new VideoResolutionError(fileId, err.attemptedEndpoints, err);
+    }
+    throw err;
+  }
+}
+

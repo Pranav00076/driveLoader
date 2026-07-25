@@ -516,6 +516,17 @@ export default function App() {
             <div style={{ backgroundColor: '#111827', border: '1px solid #1f2937', borderRadius: '12px', padding: '2rem', lineHeight: 1.7 }}>
               <h3 style={{ marginTop: 0 }}>API Reference</h3>
               
+              <h4>Video Support APIs</h4>
+              <ul style={{ paddingLeft: '1.25rem' }}>
+                <li><code>&lt;DriveVideo src="..." controls preload="metadata" /&gt;</code></li>
+                <li><code>useDriveVideo(src: string, options?: ResolveOptions): UseDriveVideoResult</code></li>
+                <li><code>resolveDriveVideo(src: string, options?: ResolveOptions): Promise&lt;ResolveVideoResult&gt;</code></li>
+                <li><code>isDriveVideo(urlOrId: string): boolean</code></li>
+                <li><code>getVideoThumbnail(src: string, options?: &#123; width?: number &#125;): string</code></li>
+                <li><code>extractVideoMetadata(src: string, options?: ResolveOptions): Promise&lt;DriveVideoMetadata&gt;</code></li>
+                <li><code>prefetchVideo(src: string, options?: ResolveOptions): Promise&lt;ResolveVideoResult&gt;</code></li>
+              </ul>
+
               <h4>Folder Loading APIs</h4>
               <ul style={{ paddingLeft: '1.25rem' }}>
                 <li><code>extractFolderId(urlOrId: string): string | null</code></li>
@@ -526,6 +537,7 @@ export default function App() {
               </ul>
             </div>
           )}
+
 
           {/* TAB 6: TROUBLESHOOTING */}
           {activeTab === 'troubleshoot' && (

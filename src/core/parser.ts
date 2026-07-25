@@ -105,3 +105,51 @@ export function detectUrlFormat(urlOrId: string): DriveUrlFormat {
 
   return 'unknown';
 }
+
+const VIDEO_EXTENSIONS_REGEX = /\.(mp4|webm|ogg|mov|mkv|m4v|avi|3gp|flv)(\?.*)?$/i;
+
+/**
+ * Checks whether a given string or URL represents a Google Drive video asset.
+ *
+ * @param urlOrId - The input Google Drive link, raw file ID, or media URL string.
+ * @returns `true` if identified as a video asset, `false` otherwise.
+ *
+ * @example
+ * ```ts
+ * isDriveVideo('https://drive.google.com/file/d/1A2b3C4d5E6f7G8h9I0j/view?type=video');
+ * // => true
+ * ```
+ */
+export function isDriveVideo(urlOrId: string): boolean {
+  if (!urlOrId || typeof urlOrId !== 'string') {
+    return false;
+  }
+
+  const cleaned = urlOrId.trim();
+  if (!cleaned) {
+    return false;
+  }
+
+  // Explicit video extension check
+  if (VIDEO_EXTENSIONS_REGEX.test(cleaned)) {
+    return true;
+  }
+
+  // Check video MIME type string or query parameter
+  if (cleaned.toLowerCase().includes('video/') || /type=video/i.test(cleaned)) {
+    return true;
+  }
+
+  const fileId = extractFileId(cleaned);
+  if (!fileId) {
+    return false;
+  }
+
+  // If input string contains video keywords or parameters
+  if (/\bvideo\b/i.test(cleaned)) {
+    return true;
+  }
+
+  return false;
+}
+

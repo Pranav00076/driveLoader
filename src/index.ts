@@ -6,6 +6,8 @@
 // Components
 export { DriveImage } from './components/DriveImage.js';
 export type { DriveImageRef } from './components/DriveImage.js';
+export { DriveVideo } from './components/DriveVideo.js';
+export type { DriveVideoRef } from './components/DriveVideo.js';
 export { DriveGallery } from './components/DriveGallery.js';
 
 // Provider & Context
@@ -15,6 +17,8 @@ export type { DriveLoaderProviderProps } from './context/DriveLoaderContext.js';
 // Hooks
 export { useDriveImage } from './hooks/useDriveImage.js';
 export type { UseDriveImageResult } from './hooks/useDriveImage.js';
+export { useDriveVideo } from './hooks/useDriveVideo.js';
+export type { UseDriveVideoResult } from './hooks/useDriveVideo.js';
 export { useDriveFolder } from './hooks/useDriveFolder.js';
 
 // Core Utilities
@@ -22,14 +26,19 @@ export {
   extractFileId,
   isGoogleDriveUrl,
   detectUrlFormat,
+  isDriveVideo,
   extractFolderId,
   isGoogleDriveFolder,
   generateCandidateUrls,
   resolveDriveImage,
+  resolveDriveVideo,
   resolveDriveImages,
   loadFolderAssets,
   analyzeDriveUrl,
   prefetch,
+  prefetchVideo,
+  extractVideoMetadata,
+  getVideoThumbnail,
   clearCache,
   getCacheStats,
   configureDriveLoader,
@@ -46,6 +55,9 @@ export {
   InvalidFolderError,
   ApiKeyMissingError,
   FolderLoadError,
+  InvalidVideoError,
+  VideoResolutionError,
+  UnsupportedVideoFormatError,
 } from './errors/DriveLoaderError.js';
 
 // Types
@@ -53,6 +65,7 @@ export type {
   DriveUrlFormat,
   ResolveOptions,
   ResolveResult,
+  ResolveVideoResult,
   BatchResolveOptions,
   BatchResolveResult,
   BatchResolveItem,
@@ -60,6 +73,8 @@ export type {
   CacheStats,
   GlobalConfig,
   DriveImageProps,
+  DriveVideoProps,
+  DriveVideoMetadata,
   DriveGalleryProps,
   DriveGalleryItem,
   DriveFolderMetadata,
@@ -68,3 +83,4 @@ export type {
   FolderLoadResult,
   UseDriveFolderResult,
 } from './types/index.js';
+

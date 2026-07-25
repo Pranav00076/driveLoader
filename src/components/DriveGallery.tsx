@@ -1,27 +1,29 @@
 import React from 'react';
 import { DriveImage } from './DriveImage.js';
+import { DriveVideo } from './DriveVideo.js';
+import { isDriveVideo } from '../core/parser.js';
 import { useDriveFolder } from '../hooks/useDriveFolder.js';
 import type { DriveGalleryProps, DriveAsset } from '../types/index.js';
 
 /**
  * DriveGallery Component
  *
- * A lightweight, responsive grid gallery for displaying collections of Google Drive images or entire public Google Drive folders.
- * Automatically resolves image links, supports responsive column layouts, lazy loading, folder pagination,
- * custom gap spacing, and click callbacks.
+ * A lightweight, responsive grid gallery for displaying collections of Google Drive images and videos, or entire public Google Drive folders.
+ * Automatically resolves image/video links, renders `<DriveVideo />` for video assets, supports responsive column layouts, lazy loading,
+ * folder pagination, custom gap spacing, and click callbacks.
  *
  * @example
  * ```tsx
- * // Single images mode:
+ * // Single media mode:
  * <DriveGallery
  *   images={[
- *     'https://drive.google.com/file/d/ID_1/view',
- *     'https://drive.google.com/file/d/ID_2/view',
+ *     'https://drive.google.com/file/d/IMAGE_ID/view',
+ *     'https://drive.google.com/file/d/VIDEO_ID/view?type=video',
  *   ]}
  *   columns={{ sm: 1, md: 2, lg: 3 }}
  * />
  *
- * // Folder mode:
+ * // Folder mode (Mixed Media):
  * <DriveGallery
  *   folderUrl="https://drive.google.com/drive/folders/1a2B3c4D5e6F7g8H9i0J"
  *   apiKey="YOUR_GOOGLE_DRIVE_API_KEY"
@@ -57,20 +59,28 @@ export const DriveGallery: React.FC<DriveGalleryProps> = ({
     orderBy,
   });
 
-  let normalizedItems: Array<{ src: string; alt: string; asset?: DriveAsset }> = [];
+  let normalizedItems: Array<{ src: string; alt: string; isVideo: boolean; asset?: DriveAsset }> = [];
 
   if (isFolderMode) {
-    normalizedItems = folderResult.assets.map((asset) => ({
-      src: asset.resolvedUrl || asset.driveUrl,
-      alt: asset.name || '',
-      asset,
-    }));
+    normalizedItems = folderResult.assets.map((asset) => {
+      const isVid = asset.type === 'video' || isDriveVideo(asset.name) || isDriveVideo(asset.mimeType);
+      return {
+        src: asset.resolvedUrl || asset.driveUrl,
+        alt: asset.name || '',
+        isVideo: isVid,
+        asset,
+      };
+    });
   } else if (Array.isArray(images)) {
-    normalizedItems = images.map((item) =>
-      typeof item === 'string'
-        ? { src: item, alt: '' }
-        : { src: item.src, alt: item.alt || '' },
-    );
+    normalizedItems = images.map((item) => {
+      const srcStr = typeof item === 'string' ? item : item.src;
+      const altStr = typeof item === 'string' ? '' : item.alt || '';
+      return {
+        src: srcStr,
+        alt: altStr,
+        isVideo: isDriveVideo(srcStr),
+      };
+    });
   }
 
   if (normalizedItems.length === 0) {
@@ -125,16 +135,28 @@ export const DriveGallery: React.FC<DriveGalleryProps> = ({
             }
           }}
         >
-          <DriveImage
-            src={item.src}
-            alt={item.alt || `Gallery Image ${index + 1}`}
-            lazy={lazy}
-            placeholder={placeholder}
-            fallback={fallback}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+          {item.isVideo ? (
+            <DriveVideo
+              src={item.src}
+              controls
+              lazy={lazy}
+              placeholder={placeholder}
+              fallback={fallback}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <DriveImage
+              src={item.src}
+              alt={item.alt || `Gallery Image ${index + 1}`}
+              lazy={lazy}
+              placeholder={placeholder}
+              fallback={fallback}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          )}
         </div>
       ))}
     </div>
   );
 };
+

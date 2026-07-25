@@ -26,6 +26,9 @@ Simply pass **any** Google Drive link or file ID to `<DriveImage src="..." />` o
 
 ## 🚀 Key Features
 
+- ✅ **Google Drive Images**: Render Google Drive images with skeletons, lazy loading, and failover endpoints.
+- ✅ **Google Drive Videos**: Stream Google Drive videos using `<DriveVideo />` with poster thumbnails and metadata extraction.
+- ✅ **Mixed Media Galleries**: Responsive `<DriveGallery />` automatically renders images and videos side-by-side.
 - 🧠 **Endpoint Learning**: Automatically remembers working CDN endpoints per file ID and prioritizes them in future resolutions.
 - 📁 **Public Folder Loading**: Load all media assets (images & videos) from a public Google Drive folder using official Google Drive API v3.
 - 🔄 **Pagination & Sorting**: Support for `loadMore()`, page tokens, sorting (`name`, `createdTime`, `modifiedTime`), and extension filtering (`['jpg', 'png', 'mp4']`).
@@ -33,8 +36,7 @@ Simply pass **any** Google Drive link or file ID to `<DriveImage src="..." />` o
 - 📦 **Batch Resolution**: Concurrently resolves arrays of URLs with `resolveDriveImages()` and worker queue controls.
 - 🔍 **Diagnostics API**: `analyzeDriveUrl(url)` inspects link validity, format variants, TTL, and actionable recommendations.
 - 📊 **Cache Metrics**: Real-time stats (`getCacheStats()`) on hit rates, active requests, and memory usage.
-- 🎨 **Component Suite**: `<DriveImage />` with skeletons, fade-in transitions, and IntersectionObserver lazy loading, plus `<DriveGallery />` for responsive grid layouts and folder galleries.
-- 🛡️ **Typed Errors**: Actionable custom error hierarchy (`InvalidDriveUrlError`, `PrivateFileError`, `ResolutionFailedError`, `InvalidFolderError`, `ApiKeyMissingError`, `FolderLoadError`).
+- 🛡️ **Typed Errors**: Actionable custom error hierarchy (`InvalidDriveUrlError`, `InvalidVideoError`, `VideoResolutionError`, `PrivateFileError`, `ResolutionFailedError`).
 - ⚡ **Zero Runtime Dependencies**: Ultra-lightweight and tree-shakeable.
 
 ---
@@ -59,6 +61,47 @@ export function ProfileAvatar() {
   );
 }
 ```
+
+### Single Video Component (`DriveVideo`)
+
+```tsx
+import { DriveVideo } from "@driveloader/react";
+import '@driveloader/react/styles.css';
+
+export function VideoPlayer({ driveUrl }: { driveUrl: string }) {
+  return (
+    <DriveVideo
+      src={driveUrl}
+      controls
+      autoPlay={false}
+      preload="metadata"
+      width={640}
+      height={360}
+    />
+  );
+}
+```
+
+### Video Resolution Hook (`useDriveVideo`)
+
+```tsx
+import { useDriveVideo } from "@driveloader/react";
+
+function VideoDetails({ driveUrl }: { driveUrl: string }) {
+  const { videoUrl, loading, error, metadata, thumbnailUrl } = useDriveVideo(driveUrl);
+
+  if (loading) return <div>Resolving Google Drive Video...</div>;
+  if (error) return <div>Failed to load video: {error.message}</div>;
+
+  return (
+    <div>
+      <video src={videoUrl!} controls poster={thumbnailUrl || undefined} />
+      <p>Duration: {metadata?.duration}s | Dimensions: {metadata?.width}x{metadata?.height}</p>
+    </div>
+  );
+}
+```
+
 
 ---
 
