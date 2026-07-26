@@ -8,7 +8,8 @@
   },
   "author": "DriveLoader Contributors",
   "license": "MIT",
-  "homepage": "https://github.com/Pranav00076/driveLoader#readme",
+  "homepage": "https://drive-loader.vercel.app/",
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pranav00076/driveLoader.git"

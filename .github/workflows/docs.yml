@@ -30,7 +30,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix website
 
       - name: Build Docs Site
         run: npm run build:docs
