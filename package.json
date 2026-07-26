@@ -47,7 +47,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "npx tsup",
+    "build": "tsup --config tsup.config.cjs",
+
 
     "build:docs": "npm run build && npm run build --prefix website",
 
