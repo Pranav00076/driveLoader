@@ -6,8 +6,8 @@ import {
   getVideoThumbnail,
   prefetchVideo,
   InvalidVideoError,
-} from '../index.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+} from '../index';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('Video Resolution & Utility Engine', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';

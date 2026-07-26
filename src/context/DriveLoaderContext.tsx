@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
-import type { GlobalConfig } from '../types/index.js';
-import { defaultCache } from '../cache/MemoryCache.js';
-import { configureDriveLoader } from '../core/resolver.js';
+import type { GlobalConfig } from '../types/index';
+import { defaultCache } from '../cache/MemoryCache';
+import { configureDriveLoader } from '../core/resolver';
 
 const DriveLoaderContext = createContext<GlobalConfig>({});
 

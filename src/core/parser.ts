@@ -1,5 +1,5 @@
-import { DRIVE_URL_PATTERNS, RAW_FILE_ID_REGEX } from '../constants/urls.js';
-import type { DriveUrlFormat } from '../types/index.js';
+import { DRIVE_URL_PATTERNS, RAW_FILE_ID_REGEX } from '../constants/urls';
+import type { DriveUrlFormat } from '../types/index';
 
 /**
  * Extracts a Google Drive file ID from any valid Google Drive link format or raw ID string.

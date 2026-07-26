@@ -1,4 +1,4 @@
-import type { CacheStats, DriveVideoMetadata } from '../types/index.js';
+import type { CacheStats, DriveVideoMetadata } from '../types/index';
 
 export interface CacheEntry {
   imageUrl: string;

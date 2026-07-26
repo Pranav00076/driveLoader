@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { DriveImage } from '../components/DriveImage.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { DriveImage } from '../components/DriveImage';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('DriveImage Component', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';

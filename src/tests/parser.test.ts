@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractFileId, isGoogleDriveUrl, detectUrlFormat } from '../core/parser.js';
+import { extractFileId, isGoogleDriveUrl, detectUrlFormat } from '../core/parser';
 
 describe('Google Drive URL Parser', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';

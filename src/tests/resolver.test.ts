@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { resolveDriveImage, configureDriveLoader } from '../core/resolver.js';
-import { defaultCache } from '../cache/MemoryCache.js';
-import { InvalidDriveUrlError } from '../errors/DriveLoaderError.js';
+import { resolveDriveImage, configureDriveLoader } from '../core/resolver';
+import { defaultCache } from '../cache/MemoryCache';
+import { InvalidDriveUrlError } from '../errors/DriveLoaderError';
 
 describe('Drive Image Resolver', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';

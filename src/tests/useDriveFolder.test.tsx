@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { useDriveFolder } from '../hooks/useDriveFolder.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { useDriveFolder } from '../hooks/useDriveFolder';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('useDriveFolder Hook', () => {
   const FOLDER_ID = '1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P';

@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { loadFolderAssets } from '../core/folderLoader.js';
+import { loadFolderAssets } from '../core/folderLoader';
 import type {
   LoadFolderOptions,
   UseDriveFolderResult,
   DriveAsset,
   DriveFolderMetadata,
   FolderLoadResult,
-} from '../types/index.js';
+} from '../types/index';
 
 /**
  * Custom React Hook for stateful Google Drive folder loading with pagination support.

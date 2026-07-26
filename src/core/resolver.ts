@@ -1,16 +1,16 @@
-import { extractFileId } from './parser.js';
-import { generateCandidateUrls } from './candidateGenerator.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { extractFileId } from './parser';
+import { generateCandidateUrls } from './candidateGenerator';
+import { defaultCache } from '../cache/MemoryCache';
 import {
   InvalidDriveUrlError,
   NoCandidateUrlsError,
   ResolutionFailedError,
   InvalidVideoError,
   VideoResolutionError,
-} from '../errors/DriveLoaderError.js';
-import { DEFAULT_CONFIG } from '../constants/urls.js';
-import { getVideoThumbnail, extractVideoMetadata } from './videoMetadata.js';
-import type { ResolveOptions, ResolveResult, ResolveVideoResult } from '../types/index.js';
+} from '../errors/DriveLoaderError';
+import { DEFAULT_CONFIG } from '../constants/urls';
+import { getVideoThumbnail, extractVideoMetadata } from './videoMetadata';
+import type { ResolveOptions, ResolveResult, ResolveVideoResult } from '../types/index';
 
 // Map for active in-flight request coalescing (deduplication)
 const activeRequestsMap = new Map<string, Promise<ResolveResult>>();

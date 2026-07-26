@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { resolveDriveImage } from '../core/resolver.js';
-import { generateCandidateUrls } from '../core/candidateGenerator.js';
-import { extractFileId } from '../core/parser.js';
-import { useDriveLoaderConfig } from '../context/DriveLoaderContext.js';
-import type { ResolveOptions, ResolveResult } from '../types/index.js';
+import { resolveDriveImage } from '../core/resolver';
+import { generateCandidateUrls } from '../core/candidateGenerator';
+import { extractFileId } from '../core/parser';
+import { useDriveLoaderConfig } from '../context/DriveLoaderContext';
+import type { ResolveOptions, ResolveResult } from '../types/index';
 
 export interface UseDriveImageResult {
   /** The working direct image URL, or null if loading or failed */

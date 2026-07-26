@@ -1,9 +1,9 @@
 import React from 'react';
-import { DriveImage } from './DriveImage.js';
-import { DriveVideo } from './DriveVideo.js';
-import { isDriveVideo } from '../core/parser.js';
-import { useDriveFolder } from '../hooks/useDriveFolder.js';
-import type { DriveGalleryProps, DriveAsset } from '../types/index.js';
+import { DriveImage } from './DriveImage';
+import { DriveVideo } from './DriveVideo';
+import { isDriveVideo } from '../core/parser';
+import { useDriveFolder } from '../hooks/useDriveFolder';
+import type { DriveGalleryProps, DriveAsset } from '../types/index';
 
 /**
  * DriveGallery Component

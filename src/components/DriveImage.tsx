@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { useDriveImage } from '../hooks/useDriveImage.js';
-import { useDriveLoaderConfig } from '../context/DriveLoaderContext.js';
-import type { DriveImageProps } from '../types/index.js';
+import { useDriveImage } from '../hooks/useDriveImage';
+import { useDriveLoaderConfig } from '../context/DriveLoaderContext';
+import type { DriveImageProps } from '../types/index';
 
 export interface DriveImageRef {
   imageElement: HTMLImageElement | null;

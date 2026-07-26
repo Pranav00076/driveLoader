@@ -1,5 +1,5 @@
-import { resolveDriveImage, resolveDriveVideo } from './resolver.js';
-import type { ResolveOptions, ResolveResult, ResolveVideoResult } from '../types/index.js';
+import { resolveDriveImage, resolveDriveVideo } from './resolver';
+import type { ResolveOptions, ResolveResult, ResolveVideoResult } from '../types/index';
 
 /**
  * Pre-resolves and preloads a Google Drive image into memory cache in the background.

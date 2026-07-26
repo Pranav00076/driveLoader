@@ -4,22 +4,22 @@
  */
 
 // Components
-export { DriveImage } from './components/DriveImage.js';
-export type { DriveImageRef } from './components/DriveImage.js';
-export { DriveVideo } from './components/DriveVideo.js';
-export type { DriveVideoRef } from './components/DriveVideo.js';
-export { DriveGallery } from './components/DriveGallery.js';
+export { DriveImage } from './components/DriveImage';
+export type { DriveImageRef } from './components/DriveImage';
+export { DriveVideo } from './components/DriveVideo';
+export type { DriveVideoRef } from './components/DriveVideo';
+export { DriveGallery } from './components/DriveGallery';
 
 // Provider & Context
-export { DriveLoaderProvider, useDriveLoaderConfig } from './context/DriveLoaderContext.js';
-export type { DriveLoaderProviderProps } from './context/DriveLoaderContext.js';
+export { DriveLoaderProvider, useDriveLoaderConfig } from './context/DriveLoaderContext';
+export type { DriveLoaderProviderProps } from './context/DriveLoaderContext';
 
 // Hooks
-export { useDriveImage } from './hooks/useDriveImage.js';
-export type { UseDriveImageResult } from './hooks/useDriveImage.js';
-export { useDriveVideo } from './hooks/useDriveVideo.js';
-export type { UseDriveVideoResult } from './hooks/useDriveVideo.js';
-export { useDriveFolder } from './hooks/useDriveFolder.js';
+export { useDriveImage } from './hooks/useDriveImage';
+export type { UseDriveImageResult } from './hooks/useDriveImage';
+export { useDriveVideo } from './hooks/useDriveVideo';
+export type { UseDriveVideoResult } from './hooks/useDriveVideo';
+export { useDriveFolder } from './hooks/useDriveFolder';
 
 // Core Utilities
 export {
@@ -42,7 +42,7 @@ export {
   clearCache,
   getCacheStats,
   configureDriveLoader,
-} from './utils/index.js';
+} from './utils/index';
 
 // Custom Error Hierarchy
 export {
@@ -58,7 +58,7 @@ export {
   InvalidVideoError,
   VideoResolutionError,
   UnsupportedVideoFormatError,
-} from './errors/DriveLoaderError.js';
+} from './errors/DriveLoaderError';
 
 // Types
 export type {
@@ -82,4 +82,4 @@ export type {
   LoadFolderOptions,
   FolderLoadResult,
   UseDriveFolderResult,
-} from './types/index.js';
+} from './types/index';

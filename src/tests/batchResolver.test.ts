@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { resolveDriveImages } from '../core/batchResolver.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { resolveDriveImages } from '../core/batchResolver';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('Batch Resolver (resolveDriveImages)', () => {
   beforeEach(() => {

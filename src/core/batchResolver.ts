@@ -1,6 +1,6 @@
-import { resolveDriveImage } from './resolver.js';
-import type { BatchResolveOptions, BatchResolveResult, BatchResolveItem } from '../types/index.js';
-import { DEFAULT_CONFIG } from '../constants/urls.js';
+import { resolveDriveImage } from './resolver';
+import type { BatchResolveOptions, BatchResolveResult, BatchResolveItem } from '../types/index';
+import { DEFAULT_CONFIG } from '../constants/urls';
 
 /**
  * Concurrently resolves an array of Google Drive URLs or File IDs.

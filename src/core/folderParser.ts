@@ -1,4 +1,4 @@
-import { RAW_FILE_ID_REGEX } from '../constants/urls.js';
+import { RAW_FILE_ID_REGEX } from '../constants/urls';
 
 const FOLDER_URL_PATTERNS: RegExp[] = [
   /drive\.google\.com\/(?:drive\/)?(?:u\/\d+\/)?folders\/([a-zA-Z0-9_-]{25,50})/i,

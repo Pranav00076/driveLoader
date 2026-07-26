@@ -1,7 +1,7 @@
-import { extractFileId, detectUrlFormat } from './parser.js';
-import { generateCandidateUrls } from './candidateGenerator.js';
-import { defaultCache } from '../cache/MemoryCache.js';
-import type { UrlDiagnostics } from '../types/index.js';
+import { extractFileId, detectUrlFormat } from './parser';
+import { generateCandidateUrls } from './candidateGenerator';
+import { defaultCache } from '../cache/MemoryCache';
+import type { UrlDiagnostics } from '../types/index';
 
 /**
  * Performs comprehensive diagnostic inspection of a Google Drive URL or File ID string.

@@ -1,9 +1,9 @@
 import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { useDriveImage } from '../hooks/useDriveImage.js';
-import { DriveLoaderProvider } from '../context/DriveLoaderContext.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { useDriveImage } from '../hooks/useDriveImage';
+import { DriveLoaderProvider } from '../context/DriveLoaderContext';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('useDriveImage Hook', () => {
   const VALID_ID = '1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O6P';

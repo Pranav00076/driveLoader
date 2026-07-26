@@ -1,16 +1,16 @@
-import { extractFolderId } from './folderParser.js';
-import { resolveDriveImages } from './batchResolver.js';
+import { extractFolderId } from './folderParser';
+import { resolveDriveImages } from './batchResolver';
 import {
   InvalidFolderError,
   ApiKeyMissingError,
   FolderLoadError,
-} from '../errors/DriveLoaderError.js';
+} from '../errors/DriveLoaderError';
 import type {
   LoadFolderOptions,
   FolderLoadResult,
   DriveFolderMetadata,
   DriveAsset,
-} from '../types/index.js';
+} from '../types/index';
 
 interface GoogleDriveFileApiItem {
   id?: string;

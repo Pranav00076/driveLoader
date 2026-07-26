@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { resolveDriveVideo } from '../core/resolver.js';
-import { generateCandidateUrls } from '../core/candidateGenerator.js';
-import { extractFileId } from '../core/parser.js';
-import { getVideoThumbnail } from '../core/videoMetadata.js';
-import { useDriveLoaderConfig } from '../context/DriveLoaderContext.js';
+import { resolveDriveVideo } from '../core/resolver';
+import { generateCandidateUrls } from '../core/candidateGenerator';
+import { extractFileId } from '../core/parser';
+import { getVideoThumbnail } from '../core/videoMetadata';
+import { useDriveLoaderConfig } from '../context/DriveLoaderContext';
 export type { UseDriveVideoResult };
 import type {
   ResolveOptions,
   ResolveVideoResult,
   DriveVideoMetadata,
   UseDriveVideoResult,
-} from '../types/index.js';
+} from '../types/index';
 
 /**
  * Custom React Hook for stateful Google Drive video resolution and metadata extraction.

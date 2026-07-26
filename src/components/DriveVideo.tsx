@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { useDriveVideo } from '../hooks/useDriveVideo.js';
-import { useDriveLoaderConfig } from '../context/DriveLoaderContext.js';
-import { getVideoThumbnail } from '../core/videoMetadata.js';
-import type { DriveVideoProps, DriveVideoMetadata } from '../types/index.js';
+import { useDriveVideo } from '../hooks/useDriveVideo';
+import { useDriveLoaderConfig } from '../context/DriveLoaderContext';
+import { getVideoThumbnail } from '../core/videoMetadata';
+import type { DriveVideoProps, DriveVideoMetadata } from '../types/index';
 
 export interface DriveVideoRef {
   videoElement: HTMLVideoElement | null;

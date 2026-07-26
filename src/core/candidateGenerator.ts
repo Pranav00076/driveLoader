@@ -1,5 +1,5 @@
-import { CANDIDATE_ENDPOINT_TEMPLATES } from '../constants/urls.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { CANDIDATE_ENDPOINT_TEMPLATES } from '../constants/urls';
+import { defaultCache } from '../cache/MemoryCache';
 
 export interface CandidateEndpoint {
   url: string;

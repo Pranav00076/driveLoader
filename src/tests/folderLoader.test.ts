@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { loadFolderAssets } from '../core/folderLoader.js';
-import { ApiKeyMissingError, InvalidFolderError } from '../errors/DriveLoaderError.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { loadFolderAssets } from '../core/folderLoader';
+import { ApiKeyMissingError, InvalidFolderError } from '../errors/DriveLoaderError';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('Folder Loader (loadFolderAssets)', () => {
   const FOLDER_ID = '1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P';

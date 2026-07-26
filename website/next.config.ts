@@ -15,12 +15,12 @@ const nextConfig: NextConfig = {
   },
   allowedDevOrigins: ["192.168.29.171", "localhost", "127.0.0.1", "*.local"],
   webpack: (config) => {
-    config.resolve.alias["@driveloader/react"] = path.resolve(__dirname, "../dist/index.js");
+    config.resolve.alias["@driveloader/react"] = path.resolve(__dirname, "../src/index.ts");
     return config;
   },
   turbopack: {
     resolveAlias: {
-      "@driveloader/react": "../dist/index.js",
+      "@driveloader/react": "../src/index.ts",
     },
   },
 };

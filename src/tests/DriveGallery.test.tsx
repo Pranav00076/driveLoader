@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
-import { DriveGallery } from '../components/DriveGallery.js';
-import { defaultCache } from '../cache/MemoryCache.js';
+import { DriveGallery } from '../components/DriveGallery';
+import { defaultCache } from '../cache/MemoryCache';
 
 describe('DriveGallery Component', () => {
   const VALID_URLS = [

@@ -4,10 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "cd .. && npx tsup --config tsup.config.cjs",
-
-
-
     "build": "next build",
 
     "start": "next start",

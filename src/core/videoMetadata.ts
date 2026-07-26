@@ -1,6 +1,6 @@
-import { extractFileId } from './parser.js';
-import { defaultCache } from '../cache/MemoryCache.js';
-import type { DriveVideoMetadata, ResolveOptions } from '../types/index.js';
+import { extractFileId } from './parser';
+import { defaultCache } from '../cache/MemoryCache';
+import type { DriveVideoMetadata, ResolveOptions } from '../types/index';
 
 /**
  * Automatically generates or retrieves thumbnails for Google Drive videos.

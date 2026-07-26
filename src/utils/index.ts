@@ -1,16 +1,16 @@
-import { defaultCache } from '../cache/MemoryCache.js';
-import { getActiveRequestCount } from '../core/resolver.js';
-import type { CacheStats } from '../types/index.js';
+import { defaultCache } from '../cache/MemoryCache';
+import { getActiveRequestCount } from '../core/resolver';
+import type { CacheStats } from '../types/index';
 
-export { extractFileId, isGoogleDriveUrl, detectUrlFormat, isDriveVideo } from '../core/parser.js';
-export { extractFolderId, isGoogleDriveFolder } from '../core/folderParser.js';
-export { generateCandidateUrls } from '../core/candidateGenerator.js';
-export { resolveDriveImage, resolveDriveVideo, configureDriveLoader } from '../core/resolver.js';
-export { resolveDriveImages } from '../core/batchResolver.js';
-export { loadFolderAssets } from '../core/folderLoader.js';
-export { analyzeDriveUrl } from '../core/diagnostics.js';
-export { prefetch, prefetchVideo } from '../core/prefetch.js';
-export { extractVideoMetadata, getVideoThumbnail } from '../core/videoMetadata.js';
+export { extractFileId, isGoogleDriveUrl, detectUrlFormat, isDriveVideo } from '../core/parser';
+export { extractFolderId, isGoogleDriveFolder } from '../core/folderParser';
+export { generateCandidateUrls } from '../core/candidateGenerator';
+export { resolveDriveImage, resolveDriveVideo, configureDriveLoader } from '../core/resolver';
+export { resolveDriveImages } from '../core/batchResolver';
+export { loadFolderAssets } from '../core/folderLoader';
+export { analyzeDriveUrl } from '../core/diagnostics';
+export { prefetch, prefetchVideo } from '../core/prefetch';
+export { extractVideoMetadata, getVideoThumbnail } from '../core/videoMetadata';
 
 /**
  * Clears all cached Google Drive image resolutions and resets performance metrics.

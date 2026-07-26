@@ -1,4 +1,4 @@
-import type { DriveUrlFormat } from '../types/index.js';
+import type { DriveUrlFormat } from '../types/index';
 
 /**
  * Default global configuration values.
