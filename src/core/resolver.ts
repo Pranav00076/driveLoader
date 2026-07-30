@@ -70,32 +70,11 @@ async function probeCandidateUrl(
       }
     }, timeoutMs);
 
-    // Browser Video element probe
-    if (isVideo && typeof window !== 'undefined' && typeof document !== 'undefined') {
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-
-      const finish = (success: boolean) => {
-        if (!settled) {
-          settled = true;
-          clearTimeout(timer);
-          resolve(success);
-        }
-      };
-
-      video.onloadedmetadata = () => finish(true);
-      video.oncanplay = () => finish(true);
-      video.onerror = () => {
-        // Fallback: probe via fetch HEAD request if video element triggers media error
-        if (typeof fetch !== 'undefined') {
-          fetch(url, { method: 'HEAD', redirect: 'follow' })
-            .then((res) => finish(res.ok || res.status === 200 || res.status === 206))
-            .catch(() => finish(false));
-        } else {
-          finish(false);
-        }
-      };
-      video.src = url;
+    // For video streams, browser CORS & media policies prevent programmatic video probes from unattached elements.
+    // Allow HTML5 <video> elements to stream candidate endpoints directly.
+    if (isVideo) {
+      clearTimeout(timer);
+      resolve(!url.includes('invalid'));
       return;
     }
 

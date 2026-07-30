@@ -117,6 +117,12 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
   }, [error, onResolveError]);
 
   useEffect(() => {
+    if (!videoUrl) return;
+    const timer = setTimeout(() => setIsDomLoaded(true), 200);
+    return () => clearTimeout(timer);
+  }, [videoUrl]);
+
+  useEffect(() => {
     if (videoUrl && onResolveSuccess) {
       const defaultMeta: DriveVideoMetadata = metadata || {
         duration: 0,
@@ -196,6 +202,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
         position: 'relative',
         display: 'inline-block',
         maxWidth: '100%',
+        maxHeight: style?.maxHeight ?? '100%',
         width: width ? (typeof width === 'number' ? `${width}px` : width) : 'auto',
         height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
         ...style,
@@ -211,6 +218,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
               width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
               height: height ? (typeof height === 'number' ? `${height}px` : height) : '240px',
               maxWidth: '100%',
+              maxHeight: '100%',
             }}
           />
         ))}
@@ -242,6 +250,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
           }`.trim()}
           style={{
             maxWidth: '100%',
+            maxHeight: '100%',
             width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
             height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
             display: !isDomLoaded && effectivePlaceholder ? 'none' : 'block',

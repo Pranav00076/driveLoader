@@ -197,16 +197,19 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
             </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             {/* Live Preview Render */}
-            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[240px] sm:min-h-[280px]">
+            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[240px] sm:min-h-[280px] h-auto overflow-hidden">
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Live Component Preview</span>
-              {React.createElement(DriveImage as any, {
-                src: imageUrlInput,
-                alt: "Playground Live Preview",
-                className: "rounded-xl shadow-2xl border border-gray-800 max-h-[480px] w-auto max-w-full object-contain",
-                onResolveSuccess: (res: any) => setImageResolveInfo(res),
-              })}
+              <div className="w-full flex items-center justify-center p-2 overflow-hidden">
+                {React.createElement(DriveImage as any, {
+                  src: imageUrlInput,
+                  alt: "Playground Live Preview",
+                  style: { maxHeight: "520px" },
+                  className: "rounded-xl shadow-2xl border border-gray-800 max-h-[520px] w-auto max-w-full object-contain",
+                  onResolveSuccess: (res: any) => setImageResolveInfo(res),
+                })}
+              </div>
             </div>
 
             {/* Inspector Panel */}
@@ -263,15 +266,18 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
             </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[260px] sm:min-h-[300px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[260px] sm:min-h-[300px] h-auto overflow-hidden">
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Live &lt;DriveVideo /&gt; Stream</span>
-              {React.createElement(DriveVideo as any, {
-                src: videoUrlInput,
-                controls: true,
-                preload: "metadata",
-                className: "w-full max-w-[640px] h-auto rounded-xl shadow-2xl border border-gray-800",
-              })}
+              <div className="w-full flex items-center justify-center p-2 overflow-hidden">
+                {React.createElement(DriveVideo as any, {
+                  src: videoUrlInput,
+                  controls: true,
+                  preload: "metadata",
+                  style: { maxHeight: "520px" },
+                  className: "w-full max-w-[640px] max-h-[520px] h-auto rounded-xl shadow-2xl border border-gray-800",
+                })}
+              </div>
             </div>
 
             <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 text-xs font-mono space-y-3">
