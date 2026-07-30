@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } f
 import { useDriveVideo } from '../hooks/useDriveVideo';
 import { useDriveLoaderConfig } from '../context/DriveLoaderContext';
 import { getVideoThumbnail } from '../core/videoMetadata';
+import { extractFileId } from '../core/parser';
 import type { DriveVideoProps, DriveVideoMetadata } from '../types/index';
 
 export interface DriveVideoRef {
@@ -48,6 +49,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
     referrerPolicy = 'no-referrer',
     cache = true,
     lazy: lazyProp,
+    mode = 'auto',
     fade: _fadeProp,
     onPlay,
     onPause,
@@ -67,9 +69,11 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
 
   const [isVisible, setIsVisible] = useState(!lazy);
   const [isDomLoaded, setIsDomLoaded] = useState(false);
+  const [hasVideoError, setHasVideoError] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const fileId = extractFileId(src);
 
   // IntersectionObserver for lazy loading
   useEffect(() => {
@@ -148,6 +152,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
     videoElement: videoRef.current,
     reload: () => {
       setIsDomLoaded(false);
+      setHasVideoError(false);
       reload({ bypassCache: true });
     },
   }));
@@ -167,6 +172,10 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
   };
 
   const handleVideoError = (_e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    if (!hasVideoError && fileId) {
+      setHasVideoError(true);
+      return;
+    }
     const err = new Error(`Failed to load video element for resolved URL: "${videoUrl}"`);
     if (onError) {
       onError(err);
@@ -174,6 +183,34 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
   };
 
   const posterUrl = customPoster || thumbnailUrl || getVideoThumbnail(src);
+
+  // Fallback to embedded Google Drive Video Preview player if native <video> errors
+  if ((mode === 'iframe' || hasVideoError) && fileId) {
+    return (
+      <div
+        ref={containerRef}
+        className={`driveloader-container driveloader-video-container ${className}`.trim()}
+        style={{
+          position: 'relative',
+          display: 'block',
+          maxWidth: '100%',
+          width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
+          height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
+          aspectRatio: '16 / 9',
+          ...style,
+        }}
+      >
+        <iframe
+          src={`https://drive.google.com/file/d/${fileId}/preview`}
+          title="Google Drive Video Player"
+          width="100%"
+          height="100%"
+          allow="autoplay; fullscreen"
+          style={{ border: 0, borderRadius: '8px', width: '100%', height: '100%', minHeight: '240px' }}
+        />
+      </div>
+    );
+  }
 
   // Render Fallback if resolution fails or DOM video load errors out
   if (error) {

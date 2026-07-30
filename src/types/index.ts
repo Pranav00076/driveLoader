@@ -444,6 +444,8 @@ export interface DriveVideoProps extends Omit<
   cache?: boolean;
   /** Enable IntersectionObserver lazy loading. Default: true */
   lazy?: boolean;
+  /** Rendering player mode ('video' | 'iframe' | 'auto'). Default: 'auto' */
+  mode?: 'video' | 'iframe' | 'auto';
   /** Enable smooth CSS fade-in animation on load. Default: true */
   fade?: boolean;
   /** Playback event callback */

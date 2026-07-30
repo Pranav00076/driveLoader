@@ -71,7 +71,7 @@ describe('Video Resolution & Utility Engine', () => {
       });
 
       expect(result).toBeDefined();
-      expect(result.videoUrl).toBe(`https://drive.google.com/uc?export=download&id=${VALID_ID}`);
+      expect(result.videoUrl).toBe(`https://drive.usercontent.google.com/download?id=${VALID_ID}&confirm=t`);
       expect(result.fileId).toBe(VALID_ID);
       expect(result.metadata).toBeDefined();
       expect(result.thumbnailUrl).toBeDefined();

@@ -18,7 +18,7 @@ describe('useDriveVideo Hook', () => {
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
-      expect(result.current.videoUrl).toBe(`https://drive.google.com/uc?export=download&id=${VALID_ID}`);
+      expect(result.current.videoUrl).toBe(`https://drive.usercontent.google.com/download?id=${VALID_ID}&confirm=t`);
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.metadata).toBeDefined();
       expect(result.current.thumbnailUrl).toContain(`thumbnail?id=${VALID_ID}`);

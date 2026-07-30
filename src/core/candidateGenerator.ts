@@ -35,17 +35,17 @@ export function generateCandidateUrls(
     // Specialized candidate templates for Google Drive video streams
     const videoEndpoints = [
       {
-        id: 'drive_uc_download',
-        template: (id: string) => `https://drive.google.com/uc?export=download&id=${id}`,
-      },
-      {
-        id: 'drive_uc_view',
-        template: (id: string) => `https://drive.google.com/uc?export=view&id=${id}`,
-      },
-      {
         id: 'drive_usercontent_download',
         template: (id: string) =>
           `https://drive.usercontent.google.com/download?id=${id}&confirm=t`,
+      },
+      {
+        id: 'drive_uc_download',
+        template: (id: string) => `https://drive.google.com/uc?export=download&id=${id}&confirm=t`,
+      },
+      {
+        id: 'drive_preview',
+        template: (id: string) => `https://drive.google.com/file/d/${id}/preview`,
       },
       {
         id: 'lh3_direct',
