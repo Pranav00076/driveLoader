@@ -75,7 +75,7 @@ const isVideo = isDriveVideo(input); // => false`,
   return (
     <div className="w-full my-8">
       {/* Interactive Step Buttons Bar */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mb-6">
         {steps.map((step, idx) => {
           const Icon = step.icon;
           const isSelected = activeStep === idx;
@@ -83,22 +83,22 @@ const isVideo = isDriveVideo(input); // => false`,
             <button
               key={step.id}
               onClick={() => setActiveStep(idx)}
-              className={`p-3 rounded-xl border text-left transition-all cursor-pointer relative overflow-hidden ${
+              className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all cursor-pointer relative overflow-hidden ${
                 isSelected
                   ? "bg-gray-800/90 border-blue-500 shadow-lg shadow-blue-500/10 scale-[1.02]"
                   : "bg-gray-900/60 border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700"
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1.5">
                 <div
-                  className={`w-7 h-7 rounded-lg bg-gradient-to-br ${step.color} p-0.5 flex items-center justify-center`}
+                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-gradient-to-br ${step.color} p-0.5 flex items-center justify-center`}
                 >
-                  <Icon className="w-3.5 h-3.5 text-white" />
+                  <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
                 </div>
-                {isSelected && <CheckCircle2 className="w-4 h-4 text-blue-400" />}
+                {isSelected && <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />}
               </div>
-              <div className="text-xs font-bold text-gray-200 truncate">{step.title}</div>
-              <div className="text-[10px] text-gray-400 truncate">{step.subtitle}</div>
+              <div className="text-[11px] sm:text-xs font-bold text-gray-200 truncate">{step.title}</div>
+              <div className="text-[9px] sm:text-[10px] text-gray-400 truncate">{step.subtitle}</div>
             </button>
           );
         })}

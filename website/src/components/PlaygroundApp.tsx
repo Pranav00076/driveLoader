@@ -120,7 +120,7 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
     <div className="w-full space-y-6">
       {/* Playground Tabs Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-2xl glass-panel">
-        <div className="flex items-center gap-1.5 overflow-x-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto max-w-full scrollbar-none pb-0.5 w-full sm:w-auto">
           {[
             { id: "image", label: "Single Image", icon: ImageIcon },
             { id: "video", label: "Video Player", icon: Video },
@@ -133,31 +133,33 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
               <button
                 key={t.id}
                 onClick={() => setTab(t.id as any)}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
                   active
                     ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
                     : "text-gray-400 hover:text-white hover:bg-gray-800/60"
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                {t.label}
+                <Icon className="w-4 h-4 shrink-0" />
+                <span>{t.label}</span>
               </button>
             );
           })}
         </div>
 
         {/* Cache Stats Bar */}
-        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-gray-900/80 border border-gray-800 text-xs">
-          <Database className="w-3.5 h-3.5 text-blue-400" />
-          <span className="text-gray-400">
-            Hits: <strong className="text-emerald-400">{cacheStats.cacheHits}</strong>
-          </span>
-          <span className="text-gray-400">
-            Rate: <strong className="text-blue-400">{cacheStats.hitRate}%</strong>
-          </span>
+        <div className="flex items-center gap-2.5 sm:gap-3 px-3 py-1.5 rounded-xl bg-gray-900/80 border border-gray-800 text-xs w-full sm:w-auto justify-between sm:justify-start">
+          <div className="flex items-center gap-2">
+            <Database className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+            <span className="text-gray-400">
+              Hits: <strong className="text-emerald-400">{cacheStats.cacheHits}</strong>
+            </span>
+            <span className="text-gray-400">
+              Rate: <strong className="text-blue-400">{cacheStats.hitRate}%</strong>
+            </span>
+          </div>
           <button
             onClick={handleClearCache}
-            className="ml-1 text-[11px] text-red-400 hover:text-red-300 underline cursor-pointer"
+            className="ml-1 text-[11px] text-red-400 hover:text-red-300 underline cursor-pointer shrink-0"
           >
             Clear
           </button>
@@ -166,10 +168,10 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
 
       {/* TAB 1: SINGLE IMAGE PLAYGROUND */}
       {tab === "image" && (
-        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6">
+        <div className="glass-panel p-4 sm:p-6 rounded-2xl border border-gray-800 space-y-6">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <ImageIcon className="w-5 h-5 text-blue-400" />
+            <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <ImageIcon className="w-5 h-5 text-blue-400 shrink-0" />
               Single Image Resolution Playground
             </h3>
             <p className="text-xs text-gray-400">
@@ -183,12 +185,12 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
               value={imageUrlInput}
               onChange={(e) => setImageUrlInput(e.target.value)}
               placeholder="Paste Google Drive image link or File ID..."
-              className="flex-1 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm font-mono focus:border-blue-500 focus:outline-none"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs sm:text-sm font-mono focus:border-blue-500 focus:outline-none w-full min-w-0"
             />
             <button
               onClick={handleResolveImageManual}
               disabled={imageResolving}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0"
             >
               {imageResolving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
               <span>Resolve Image</span>
@@ -197,18 +199,16 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Live Preview Render */}
-            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-6 flex flex-col items-center justify-center min-h-[280px]">
+            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[240px] sm:min-h-[280px]">
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Live Component Preview</span>
               {React.createElement(DriveImage as any, {
                 src: imageUrlInput,
                 alt: "Playground Live Preview",
                 width: 360,
                 height: 240,
-                className: "rounded-xl shadow-2xl border border-gray-800 object-cover",
+                className: "w-full max-w-[360px] h-auto rounded-xl shadow-2xl border border-gray-800 object-cover",
                 onResolveSuccess: (res: any) => setImageResolveInfo(res),
               })}
-
-
             </div>
 
             {/* Inspector Panel */}
@@ -236,10 +236,10 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
 
       {/* TAB 2: VIDEO PLAYER PLAYGROUND */}
       {tab === "video" && (
-        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6">
+        <div className="glass-panel p-4 sm:p-6 rounded-2xl border border-gray-800 space-y-6">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Video className="w-5 h-5 text-purple-400" />
+            <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <Video className="w-5 h-5 text-purple-400 shrink-0" />
               Google Drive Video Player Playground
             </h3>
             <p className="text-xs text-gray-400">
@@ -253,12 +253,12 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
               value={videoUrlInput}
               onChange={(e) => setVideoUrlInput(e.target.value)}
               placeholder="Paste Google Drive video share link..."
-              className="flex-1 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm font-mono focus:border-purple-500 focus:outline-none"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs sm:text-sm font-mono focus:border-purple-500 focus:outline-none w-full min-w-0"
             />
             <button
               onClick={handleResolveVideoManual}
               disabled={videoResolving}
-              className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0"
+              className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0"
             >
               {videoResolving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
               <span>Resolve Video</span>
@@ -266,7 +266,7 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-6 flex flex-col items-center justify-center min-h-[300px]">
+            <div className="bg-[#070a13] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col items-center justify-center min-h-[260px] sm:min-h-[300px]">
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Live &lt;DriveVideo /&gt; Stream</span>
               {React.createElement(DriveVideo as any, {
                 src: videoUrlInput,
@@ -274,7 +274,7 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
                 preload: "metadata",
                 width: 480,
                 height: 270,
-                className: "rounded-xl shadow-2xl border border-gray-800",
+                className: "w-full max-w-[480px] h-auto rounded-xl shadow-2xl border border-gray-800",
               })}
             </div>
 

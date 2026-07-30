@@ -47,18 +47,18 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
           : "bg-[#090d16]/40 backdrop-blur-md border-b border-gray-800/40"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+        <Link href="/" className="flex items-center gap-2 group shrink-0 min-w-0">
           <img
             src="/LogoDL.png"
             alt="DriveLoader Logo"
-            className="h-9 sm:h-10 w-auto object-contain group-hover:scale-105 transition-transform"
+            className="h-8 sm:h-10 w-auto object-contain group-hover:scale-105 transition-transform shrink-0"
           />
-          <div className="flex flex-col">
-            <span className="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-1.5 whitespace-nowrap">
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm sm:text-lg font-bold tracking-tight text-white flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
               DriveLoader
-              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              <span className="text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
                 v1.2.0
               </span>
             </span>

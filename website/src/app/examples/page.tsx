@@ -148,7 +148,7 @@ function LogStats() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-gray-900/80 rounded-2xl border border-gray-800 w-fit">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1.5 bg-gray-900/80 rounded-2xl border border-gray-800 w-full sm:w-fit overflow-x-auto scrollbar-none">
         {[
           { id: "all", label: "All Examples" },
           { id: "image", label: "Images" },
@@ -161,7 +161,7 @@ function LogStats() {
           <button
             key={t.id}
             onClick={() => setFilter(t.id)}
-            className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
               filter === t.id
                 ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
                 : "text-gray-400 hover:text-white hover:bg-gray-800"

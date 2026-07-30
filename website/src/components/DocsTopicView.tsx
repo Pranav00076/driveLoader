@@ -91,7 +91,7 @@ export function DocsTopicView({ slug }: { slug: string }) {
   const doc = docsData[slug] || docsData["installation"];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex gap-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col lg:flex-row gap-8">
       <DocsSidebar />
 
       <div className="flex-1 space-y-8 max-w-4xl">

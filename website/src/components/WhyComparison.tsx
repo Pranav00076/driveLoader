@@ -8,29 +8,29 @@ export function WhyComparison() {
 
   return (
     <div className="w-full my-8">
-      <div className="flex items-center justify-center mb-8">
-        <div className="bg-gray-900/90 p-1 rounded-xl border border-gray-800 flex gap-1 shadow-inner">
+      <div className="flex items-center justify-center mb-8 w-full">
+        <div className="bg-gray-900/90 p-1.5 rounded-2xl border border-gray-800 flex flex-col sm:flex-row w-full sm:w-auto gap-1.5 shadow-inner">
           <button
             onClick={() => setActiveTab("problem")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+            className={`px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto ${
               activeTab === "problem"
                 ? "bg-red-500/10 text-red-400 border border-red-500/20 shadow-sm"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            <XCircle className="w-4 h-4 text-red-400" />
-            Standard Google Drive Links Fail
+            <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+            <span>Standard Google Drive Links Fail</span>
           </button>
           <button
             onClick={() => setActiveTab("solution")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+            className={`px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto ${
               activeTab === "solution"
                 ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            DriveLoader Fixes Them Automatically
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>DriveLoader Fixes Them Automatically</span>
           </button>
         </div>
       </div>

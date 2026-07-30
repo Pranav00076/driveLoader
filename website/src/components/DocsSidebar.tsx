@@ -45,36 +45,69 @@ export function DocsSidebar() {
     },
   ];
 
+  const currentItem = sections.flatMap((s) => s.items).find((i) => pathname === i.href || (i.slug === "introduction" && pathname === "/docs"));
+
   return (
-    <aside className="w-64 shrink-0 hidden lg:block pr-6 space-y-6">
-      <div className="sticky top-20 space-y-6">
-        {sections.map((sec, idx) => (
-          <div key={idx} className="space-y-2">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2">
-              {sec.title}
-            </h4>
-            <ul className="space-y-1">
-              {sec.items.map((item) => {
-                const isActive = pathname === item.href || (item.slug === "introduction" && pathname === "/docs");
-                return (
-                  <li key={item.slug}>
-                    <Link
-                      href={item.href}
-                      className={`block px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                        isActive
-                          ? "bg-blue-600/10 text-blue-400 font-semibold border border-blue-500/20 shadow-sm"
-                          : "text-gray-400 hover:text-white hover:bg-gray-800/40"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+    <>
+      {/* Mobile Docs Navigation Dropdown */}
+      <div className="w-full lg:hidden mb-6 glass-panel p-3 rounded-2xl border border-gray-800 space-y-2">
+        <label htmlFor="docs-mobile-nav" className="text-xs font-bold text-gray-400 uppercase tracking-wider block px-1">
+          Documentation Topic
+        </label>
+        <select
+          id="docs-mobile-nav"
+          value={currentItem?.href || "/docs"}
+          onChange={(e) => {
+            if (e.target.value) {
+              window.location.href = e.target.value;
+            }
+          }}
+          className="w-full px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-blue-400 text-xs font-medium focus:border-blue-500 focus:outline-none"
+        >
+          {sections.map((sec, secIdx) => (
+            <optgroup key={secIdx} label={sec.title} className="bg-gray-900 text-gray-300">
+              {sec.items.map((item) => (
+                <option key={item.slug} value={item.href} className="bg-gray-900 text-white">
+                  {item.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
       </div>
-    </aside>
+
+      {/* Desktop Sidebar Navigation */}
+      <aside className="w-64 shrink-0 hidden lg:block pr-6 space-y-6">
+        <div className="sticky top-20 space-y-6">
+          {sections.map((sec, idx) => (
+            <div key={idx} className="space-y-2">
+              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2">
+                {sec.title}
+              </h4>
+              <ul className="space-y-1">
+                {sec.items.map((item) => {
+                  const isActive = pathname === item.href || (item.slug === "introduction" && pathname === "/docs");
+                  return (
+                    <li key={item.slug}>
+                      <Link
+                        href={item.href}
+                        className={`block px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          isActive
+                            ? "bg-blue-600/10 text-blue-400 font-semibold border border-blue-500/20 shadow-sm"
+                            : "text-gray-400 hover:text-white hover:bg-gray-800/40"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </aside>
+    </>
   );
 }
+

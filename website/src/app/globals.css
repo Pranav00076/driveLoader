@@ -46,6 +46,15 @@ html, body {
   background: #374151;
 }
 
+/* Hide scrollbar for clean touch scrolling */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Glassmorphism utility */
 .glass-panel {
   background: rgba(17, 24, 39, 0.7);

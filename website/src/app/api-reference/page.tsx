@@ -214,7 +214,7 @@ export default function ApiReferencePage() {
                   <div key={itemIdx} className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-gray-800/60 pb-3">
                       <h3 className="text-lg font-bold text-blue-400 font-mono">{item.name}</h3>
-                      <span className="text-xs font-mono text-gray-400 bg-gray-900 px-2.5 py-1 rounded-lg border border-gray-800 w-fit">
+                      <span className="text-xs font-mono text-gray-400 bg-gray-900 px-2.5 py-1 rounded-lg border border-gray-800 w-fit max-w-full break-all">
                         {item.signature}
                       </span>
                     </div>
@@ -222,27 +222,44 @@ export default function ApiReferencePage() {
                     <p className="text-xs text-gray-300 leading-relaxed">{item.description}</p>
 
                     {item.propsTable && (
-                      <div className="overflow-x-auto pt-2">
-                        <table className="w-full text-left text-xs border-collapse font-sans">
-                          <thead>
-                            <tr className="border-b border-gray-800 text-gray-400">
-                              <th className="py-2 pr-4 font-semibold">Prop / Key</th>
-                              <th className="py-2 pr-4 font-semibold">Type</th>
-                              <th className="py-2 pr-4 font-semibold">Default</th>
-                              <th className="py-2 font-semibold">Description</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-800/40 text-gray-300">
-                            {item.propsTable.map((p, pIdx) => (
-                              <tr key={pIdx} className="hover:bg-gray-900/30">
-                                <td className="py-2.5 pr-4 font-mono font-bold text-blue-300">{p.name}</td>
-                                <td className="py-2.5 pr-4 font-mono text-purple-300 text-[11px]">{p.type}</td>
-                                <td className="py-2.5 pr-4 font-mono text-gray-400">{p.default}</td>
-                                <td className="py-2.5 text-gray-400">{p.desc}</td>
+                      <div className="pt-2">
+                        {/* Mobile prop card list */}
+                        <div className="sm:hidden space-y-3">
+                          {item.propsTable.map((p, pIdx) => (
+                            <div key={pIdx} className="p-3 bg-gray-900/60 rounded-xl border border-gray-800/80 space-y-1.5">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="font-mono font-bold text-blue-300 text-xs">{p.name}</span>
+                                <span className="font-mono text-gray-400 text-[10px]">Default: {p.default}</span>
+                              </div>
+                              <div className="font-mono text-purple-300 text-[11px] break-all bg-black/40 px-2 py-0.5 rounded w-fit">{p.type}</div>
+                              <p className="text-xs text-gray-400 font-sans">{p.desc}</p>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Desktop prop table */}
+                        <div className="hidden sm:block overflow-x-auto">
+                          <table className="w-full text-left text-xs border-collapse font-sans">
+                            <thead>
+                              <tr className="border-b border-gray-800 text-gray-400">
+                                <th className="py-2 pr-4 font-semibold">Prop / Key</th>
+                                <th className="py-2 pr-4 font-semibold">Type</th>
+                                <th className="py-2 pr-4 font-semibold">Default</th>
+                                <th className="py-2 font-semibold">Description</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody className="divide-y divide-gray-800/40 text-gray-300">
+                              {item.propsTable.map((p, pIdx) => (
+                                <tr key={pIdx} className="hover:bg-gray-900/30">
+                                  <td className="py-2.5 pr-4 font-mono font-bold text-blue-300">{p.name}</td>
+                                  <td className="py-2.5 pr-4 font-mono text-purple-300 text-[11px]">{p.type}</td>
+                                  <td className="py-2.5 pr-4 font-mono text-gray-400">{p.default}</td>
+                                  <td className="py-2.5 text-gray-400">{p.desc}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     )}
                   </div>

@@ -140,29 +140,29 @@ export function App() {
       <section className="relative pt-12 lg:pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center space-y-6 max-w-4xl mx-auto">
           {/* Version Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold shadow-inner">
-            <Sparkles className="w-3.5 h-3.5 fill-blue-400/30" />
+          <div className="inline-flex flex-wrap justify-center items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] sm:text-xs font-semibold shadow-inner max-w-full">
+            <Sparkles className="w-3.5 h-3.5 fill-blue-400/30 shrink-0" />
             <span>DriveLoader v1.2.0 Released</span>
-            <span className="text-gray-500">•</span>
+            <span className="text-gray-500 hidden sm:inline">•</span>
             <span className="text-gray-300">Google Drive Video & Mixed Galleries</span>
           </div>
 
           {/* Hero Main Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
-            Turn Google Drive into your <br />
+          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] sm:leading-[1.1] break-words">
+            Turn Google Drive into your <br className="hidden sm:inline" />
             <span className="text-gradient">React Media CDN.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto font-normal">
+          <p className="text-base sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto font-normal">
             The complete React library for loading, streaming, caching, and resolving Google Drive hosted images, videos, and public folders.
           </p>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4 w-full">
             <Link
               href="/docs"
-              className="px-6 py-3.5 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-xl shadow-blue-600/25 hover:shadow-blue-500/40 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-xl shadow-blue-600/25 hover:shadow-blue-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <span>Get Started</span>
               <ArrowRight className="w-4 h-4" />
@@ -171,17 +171,16 @@ export function App() {
               href="https://github.com/Pranav00076/driveLoader"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3.5 rounded-xl font-semibold text-gray-200 bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 transition-all flex items-center gap-2.5 cursor-pointer shadow-sm"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-semibold text-gray-200 bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-sm"
             >
               <GithubIcon className="w-4 h-4 text-gray-300" />
-
               <span>GitHub</span>
             </a>
             <a
               href="https://www.npmjs.com/package/@driveloader/react"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3.5 rounded-xl font-semibold text-gray-200 bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 transition-all flex items-center gap-2.5 cursor-pointer shadow-sm"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-semibold text-gray-200 bg-gray-900/90 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-sm"
             >
               <Package className="w-4 h-4 text-red-400" />
               <span>NPM</span>
