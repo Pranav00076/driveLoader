@@ -202,6 +202,7 @@ export async function resolveDriveImage(
       const candidates = generateCandidateUrls(fileId, {
         width: mergedOptions.width,
         learnedEndpointIndex: defaultCache.getPreferredEndpointIndex(),
+        isVideo: isVideoTarget,
       });
 
       if (candidates.length === 0) {

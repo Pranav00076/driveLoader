@@ -48,7 +48,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
     referrerPolicy = 'no-referrer',
     cache = true,
     lazy: lazyProp,
-    fade: fadeProp,
+    fade: _fadeProp,
     onPlay,
     onPause,
     onEnded,
@@ -64,7 +64,6 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
   const globalConfig = useDriveLoaderConfig();
 
   const lazy = lazyProp ?? globalConfig.lazy ?? true;
-  const fade = fadeProp ?? true;
 
   const [isVisible, setIsVisible] = useState(!lazy);
   const [isDomLoaded, setIsDomLoaded] = useState(false);
@@ -200,11 +199,12 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
       className={`driveloader-container driveloader-video-container ${className}`.trim()}
       style={{
         position: 'relative',
-        display: 'inline-block',
+        display: 'block',
         maxWidth: '100%',
         maxHeight: style?.maxHeight ?? '100%',
-        width: width ? (typeof width === 'number' ? `${width}px` : width) : 'auto',
+        width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
         height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
+        aspectRatio: '16 / 9',
         ...style,
       }}
     >
@@ -219,6 +219,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
               height: height ? (typeof height === 'number' ? `${height}px` : height) : '240px',
               maxWidth: '100%',
               maxHeight: '100%',
+              aspectRatio: '16 / 9',
             }}
           />
         ))}
@@ -245,15 +246,15 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
           onLoadedMetadata={handleLoadedMetadata}
           onCanPlay={handleCanPlay}
           onError={handleVideoError}
-          className={`driveloader-video ${
-            fade ? (isDomLoaded ? 'driveloader-video-loaded' : 'driveloader-video-loading') : ''
-          }`.trim()}
+          className="driveloader-video driveloader-video-loaded"
           style={{
             maxWidth: '100%',
             maxHeight: '100%',
-            width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
-            height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
-            display: !isDomLoaded && effectivePlaceholder ? 'none' : 'block',
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            aspectRatio: '16 / 9',
+            display: 'block',
           }}
           {...restVideoProps}
         />

@@ -24,11 +24,42 @@ export interface CandidateEndpoint {
  */
 export function generateCandidateUrls(
   fileId: string,
-  options?: { width?: number; learnedEndpointIndex?: number | null },
+  options?: { width?: number; learnedEndpointIndex?: number | null; isVideo?: boolean },
 ): CandidateEndpoint[] {
   if (!fileId) return [];
 
   const width = options?.width || 1000;
+  const isVideo = Boolean(options?.isVideo);
+
+  if (isVideo) {
+    // Specialized candidate templates for Google Drive video streams
+    const videoEndpoints = [
+      {
+        id: 'drive_uc_download',
+        template: (id: string) => `https://drive.google.com/uc?export=download&id=${id}`,
+      },
+      {
+        id: 'drive_uc_view',
+        template: (id: string) => `https://drive.google.com/uc?export=view&id=${id}`,
+      },
+      {
+        id: 'drive_usercontent_download',
+        template: (id: string) =>
+          `https://drive.usercontent.google.com/download?id=${id}&confirm=t`,
+      },
+      {
+        id: 'lh3_direct',
+        template: (id: string) => `https://lh3.googleusercontent.com/d/${id}`,
+      },
+    ];
+
+    return videoEndpoints.map((item, index) => ({
+      url: item.template(fileId),
+      index,
+      id: item.id,
+    }));
+  }
+
   const candidates: CandidateEndpoint[] = CANDIDATE_ENDPOINT_TEMPLATES.map((item, index) => ({
     url: item.template(fileId, width),
     index,
