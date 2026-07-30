@@ -24,6 +24,8 @@ export interface ResolveOptions {
   debug?: boolean;
   /** Custom candidate endpoint probe handler (useful for testing or custom proxies) */
   probeFn?: (url: string) => Promise<boolean>;
+  /** Explicitly flag resolution target as video media. Default: false */
+  isVideo?: boolean;
 }
 
 /**

@@ -47,10 +47,15 @@ function debugLog(enabled: boolean, message: string, ...extra: unknown[]): void 
 }
 
 /**
- * Probes a candidate URL to verify if it serves a valid image.
- * Uses Image preloading in browser environments and fetch HEAD/GET in server/test environments.
+/**
+ * Probes a candidate URL to verify if it serves a valid image or video.
+ * Uses Image/Video preloading in browser environments and fetch HEAD/GET in server/test environments.
  */
-async function probeCandidateUrl(url: string, timeoutMs: number): Promise<boolean> {
+async function probeCandidateUrl(
+  url: string,
+  timeoutMs: number,
+  isVideo = false,
+): Promise<boolean> {
   if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
     return !url.includes('invalid');
   }
@@ -65,8 +70,37 @@ async function probeCandidateUrl(url: string, timeoutMs: number): Promise<boolea
       }
     }, timeoutMs);
 
+    // Browser Video element probe
+    if (isVideo && typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+
+      const finish = (success: boolean) => {
+        if (!settled) {
+          settled = true;
+          clearTimeout(timer);
+          resolve(success);
+        }
+      };
+
+      video.onloadedmetadata = () => finish(true);
+      video.oncanplay = () => finish(true);
+      video.onerror = () => {
+        // Fallback: probe via fetch HEAD request if video element triggers media error
+        if (typeof fetch !== 'undefined') {
+          fetch(url, { method: 'HEAD', redirect: 'follow' })
+            .then((res) => finish(res.ok || res.status === 200 || res.status === 206))
+            .catch(() => finish(false));
+        } else {
+          finish(false);
+        }
+      };
+      video.src = url;
+      return;
+    }
+
     // Browser Image preloading test
-    if (typeof window !== 'undefined' && typeof window.Image !== 'undefined') {
+    if (!isVideo && typeof window !== 'undefined' && typeof window.Image !== 'undefined') {
       const img = new window.Image();
       img.referrerPolicy = 'no-referrer';
       img.onload = () => {
@@ -98,7 +132,12 @@ async function probeCandidateUrl(url: string, timeoutMs: number): Promise<boolea
             const contentType = res.headers.get('content-type') || '';
             const isSuccess =
               res.ok &&
-              (contentType.startsWith('image/') || contentType === '' || res.status === 200);
+              (contentType.startsWith('image/') ||
+                contentType.startsWith('video/') ||
+                contentType.includes('octet-stream') ||
+                contentType === '' ||
+                res.status === 200 ||
+                res.status === 206);
             resolve(isSuccess);
           }
         })
@@ -112,14 +151,14 @@ async function probeCandidateUrl(url: string, timeoutMs: number): Promise<boolea
       return;
     }
 
-    // Fallback if neither Image nor fetch exist
+    // Fallback if neither element nor fetch exist
     clearTimeout(timer);
     resolve(true);
   });
 }
 
 /**
- * Core function for resolving any Google Drive URL or File ID into a direct working image URL.
+ * Core function for resolving any Google Drive URL or File ID into a direct working image or video URL.
  * Includes request deduplication, candidate fallback, endpoint learning, and memory caching.
  *
  * @param src - Google Drive URL or File ID string.
@@ -143,6 +182,7 @@ export async function resolveDriveImage(
   };
 
   const debug = Boolean(mergedOptions.debug);
+  const isVideoTarget = Boolean(mergedOptions.isVideo);
 
   // 1. Extract File ID
   const fileId = extractFileId(src);
@@ -219,7 +259,7 @@ export async function resolveDriveImage(
           if (mergedOptions.probeFn) {
             probeSuccess = await mergedOptions.probeFn(candidate.url);
           } else {
-            probeSuccess = await probeCandidateUrl(candidate.url, timeoutMs);
+            probeSuccess = await probeCandidateUrl(candidate.url, timeoutMs, isVideoTarget);
           }
           if (probeSuccess) {
             break;
@@ -306,7 +346,7 @@ export async function resolveDriveVideo(
   }
 
   try {
-    const resolveResult = await resolveDriveImage(src, options);
+    const resolveResult = await resolveDriveImage(src, { ...options, isVideo: true });
     const metadata = await extractVideoMetadata(src, options);
     const thumbnailUrl = getVideoThumbnail(src, { width: options?.width });
 

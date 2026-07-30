@@ -154,6 +154,13 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
     }
   };
 
+  const handleCanPlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    setIsDomLoaded(true);
+    if (onCanPlay) {
+      onCanPlay(e);
+    }
+  };
+
   const handleVideoError = (_e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     const err = new Error(`Failed to load video element for resolved URL: "${videoUrl}"`);
     if (onError) {
@@ -188,6 +195,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
       style={{
         position: 'relative',
         display: 'inline-block',
+        maxWidth: '100%',
         width: width ? (typeof width === 'number' ? `${width}px` : width) : 'auto',
         height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
         ...style,
@@ -202,6 +210,7 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
             style={{
               width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
               height: height ? (typeof height === 'number' ? `${height}px` : height) : '240px',
+              maxWidth: '100%',
             }}
           />
         ))}
@@ -224,13 +233,15 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
 
           onPause={onPause}
           onEnded={onEnded}
+          onLoadedData={() => setIsDomLoaded(true)}
           onLoadedMetadata={handleLoadedMetadata}
-          onCanPlay={onCanPlay}
+          onCanPlay={handleCanPlay}
           onError={handleVideoError}
           className={`driveloader-video ${
             fade ? (isDomLoaded ? 'driveloader-video-loaded' : 'driveloader-video-loading') : ''
           }`.trim()}
           style={{
+            maxWidth: '100%',
             width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
             height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
             display: !isDomLoaded && effectivePlaceholder ? 'none' : 'block',

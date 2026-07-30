@@ -155,6 +155,7 @@ export const DriveImage = forwardRef<DriveImageRef, DriveImageProps>(function Dr
       style={{
         position: 'relative',
         display: 'inline-block',
+        maxWidth: '100%',
         width: width ? (typeof width === 'number' ? `${width}px` : width) : 'auto',
         height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
         ...style,
@@ -169,6 +170,7 @@ export const DriveImage = forwardRef<DriveImageRef, DriveImageProps>(function Dr
             style={{
               width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
               height: height ? (typeof height === 'number' ? `${height}px` : height) : '200px',
+              maxWidth: '100%',
             }}
           />
         ))}
@@ -189,8 +191,10 @@ export const DriveImage = forwardRef<DriveImageRef, DriveImageProps>(function Dr
             fade ? (isDomLoaded ? 'driveloader-image-loaded' : 'driveloader-image-loading') : ''
           }`.trim()}
           style={{
-            width: width ? (typeof width === 'number' ? `${width}px` : width) : '100%',
+            maxWidth: '100%',
+            width: width ? (typeof width === 'number' ? `${width}px` : width) : 'auto',
             height: height ? (typeof height === 'number' ? `${height}px` : height) : 'auto',
+            objectFit: 'contain',
             display: !isDomLoaded && effectivePlaceholder ? 'none' : 'block',
           }}
           {...restImgProps}

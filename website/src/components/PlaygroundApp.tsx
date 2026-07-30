@@ -204,9 +204,7 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
               {React.createElement(DriveImage as any, {
                 src: imageUrlInput,
                 alt: "Playground Live Preview",
-                width: 360,
-                height: 240,
-                className: "w-full max-w-[360px] h-auto rounded-xl shadow-2xl border border-gray-800 object-cover",
+                className: "rounded-xl shadow-2xl border border-gray-800 max-h-[480px] w-auto max-w-full object-contain",
                 onResolveSuccess: (res: any) => setImageResolveInfo(res),
               })}
             </div>
@@ -272,9 +270,7 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
                 src: videoUrlInput,
                 controls: true,
                 preload: "metadata",
-                width: 480,
-                height: 270,
-                className: "w-full max-w-[480px] h-auto rounded-xl shadow-2xl border border-gray-800",
+                className: "w-full max-w-[640px] h-auto rounded-xl shadow-2xl border border-gray-800",
               })}
             </div>
 
