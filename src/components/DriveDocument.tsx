@@ -98,6 +98,7 @@ export const DriveDocument: React.FC<DriveDocumentProps> = ({
       className={`driveloader-document ${className}`}
       style={{
         width,
+        height: typeof height === 'number' ? `${height}px` : height,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '12px',
@@ -117,6 +118,7 @@ export const DriveDocument: React.FC<DriveDocumentProps> = ({
           padding: '0.6rem 1rem',
           background: '#27272a',
           borderBottom: '1px solid rgba(255,255,255,0.05)',
+          flexShrink: 0,
         }}
       >
         <span
@@ -190,16 +192,19 @@ export const DriveDocument: React.FC<DriveDocumentProps> = ({
       <div
         style={{
           flex: 1,
+          minHeight: 0,
+          width: '100%',
           position: 'relative',
-          overflow: 'auto',
-          height: typeof height === 'number' ? `${height}px` : height,
+          overflow: 'hidden',
         }}
       >
         {isTextMode ? (
           <div
             style={{
               padding: '1.5rem',
-              transform: `scale(${currentZoom})`,
+              height: '100%',
+              overflow: 'auto',
+              transform: currentZoom === 1 ? 'none' : `scale(${currentZoom})`,
               transformOrigin: 'top left',
               whiteSpace: 'pre-wrap',
               fontFamily: format === 'md' ? 'system-ui, sans-serif' : 'monospace',
@@ -214,10 +219,10 @@ export const DriveDocument: React.FC<DriveDocumentProps> = ({
             src={documentUrl}
             title="Google Drive Document Viewer"
             style={{
-              width: '100%',
-              height: '100%',
+              width: currentZoom === 1 ? '100%' : `${100 / currentZoom}%`,
+              height: currentZoom === 1 ? '100%' : `${100 / currentZoom}%`,
               border: 'none',
-              transform: `scale(${currentZoom})`,
+              transform: currentZoom === 1 ? 'none' : `scale(${currentZoom})`,
               transformOrigin: 'top left',
             }}
             allowFullScreen
@@ -225,5 +230,6 @@ export const DriveDocument: React.FC<DriveDocumentProps> = ({
         )}
       </div>
     </div>
+
   );
 };

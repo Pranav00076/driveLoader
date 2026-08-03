@@ -1,4 +1,4 @@
-import { extractFileId, detectUrlFormat } from './parser';
+import { extractFileId, detectUrlFormat, detectMediaType } from './parser';
 import { generateCandidateUrls } from './candidateGenerator';
 import { defaultCache } from '../cache/MemoryCache';
 import type { UrlDiagnostics } from '../types/index';
@@ -19,6 +19,7 @@ import type { UrlDiagnostics } from '../types/index';
 export function analyzeDriveUrl(url: string): UrlDiagnostics {
   const fileId = extractFileId(url);
   const detectedFormat = detectUrlFormat(url);
+  const mediaType = detectMediaType(url);
   const valid = fileId !== null;
 
   const candidateUrls = valid ? generateCandidateUrls(fileId).map((c) => c.url) : [];
@@ -34,7 +35,7 @@ export function analyzeDriveUrl(url: string): UrlDiagnostics {
     );
   } else {
     recommendations.push(
-      `Valid Google Drive link format ("${detectedFormat}") parsed. File ID extracted: "${fileId}".`,
+      `Valid Google Drive link format ("${detectedFormat}") parsed. Media Type: "${mediaType}". File ID extracted: "${fileId}".`,
     );
     recommendations.push(
       `Verify in Google Drive that file access is set to "Anyone with the link can view".`,
@@ -61,6 +62,7 @@ export function analyzeDriveUrl(url: string): UrlDiagnostics {
     valid,
     fileId,
     detectedFormat,
+    mediaType,
     candidateUrls,
     cached,
     cacheTTL,
@@ -68,3 +70,4 @@ export function analyzeDriveUrl(url: string): UrlDiagnostics {
     warnings,
   };
 }
+

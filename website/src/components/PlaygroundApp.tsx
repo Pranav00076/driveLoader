@@ -115,17 +115,16 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
 
   const handleRunDiagnostics = () => {
     const diag = analyzeDriveUrl(resolverInput);
-    const isVid = isDriveVideo(resolverInput);
     const fileId = diag.fileId;
     const candidates = diag.candidateUrls;
 
     setDiagnosticResult({
       ...diag,
-      isVideo: isVid,
       winningEndpoint: candidates[0] || "https://lh3.googleusercontent.com/d/" + (fileId || ""),
     });
     setCacheStats(getCacheStats());
   };
+
 
   const handleClearCache = () => {
     clearCache();
@@ -419,8 +418,9 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
                 </div>
                 <div className="p-3 bg-gray-900/60 rounded-xl border border-gray-800">
                   <div className="text-[10px] text-gray-500 uppercase font-sans">Asset Media Type</div>
-                  <div className="text-base font-bold text-purple-400 mt-1">{diagnosticResult.isVideo ? "Video" : "Image"}</div>
+                  <div className="text-base font-bold text-purple-400 mt-1 capitalize">{diagnosticResult.mediaType || "Image"}</div>
                 </div>
+
                 <div className="p-3 bg-gray-900/60 rounded-xl border border-gray-800">
                   <div className="text-[10px] text-gray-500 uppercase font-sans">Extracted File ID</div>
                   <div className="text-sm font-bold text-amber-400 mt-1 truncate">{diagnosticResult.fileId || "N/A"}</div>
@@ -538,8 +538,9 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
             />
 
             <div className="h-[550px] bg-[#070a13] border border-gray-800 rounded-2xl overflow-hidden">
-              {React.createElement(DriveDocument as any, { src: docUrlInput, height: "550px" })}
+              {React.createElement(DriveDocument as any, { src: docUrlInput, height: "100%" })}
             </div>
+
           </div>
         </div>
       )}

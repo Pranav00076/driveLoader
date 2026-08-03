@@ -95,6 +95,8 @@ export interface UrlDiagnostics {
   fileId: string | null;
   /** Recognized Google Drive link pattern variant */
   detectedFormat: DriveUrlFormat;
+  /** Classified media type ('image' | 'video' | 'audio' | 'document' | 'unknown') */
+  mediaType: 'image' | 'video' | 'audio' | 'document' | 'unknown';
   /** Ordered list of generated candidate direct image URLs */
   candidateUrls: string[];
   /** Whether this file ID's resolution is currently cached */
@@ -106,6 +108,7 @@ export interface UrlDiagnostics {
   /** List of warnings or permission flags */
   warnings: string[];
 }
+
 
 /**
  * Performance and usage metrics returned by getCacheStats.

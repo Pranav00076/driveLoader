@@ -211,7 +211,11 @@ export function isDriveDocument(urlOrId: string): boolean {
     cleaned.includes('docs.google.com/document') ||
     cleaned.includes('docs.google.com/spreadsheets') ||
     cleaned.includes('docs.google.com/presentation') ||
-    /type=document/i.test(cleaned) ||
+    /type=(document|pdf|doc|text)/i.test(cleaned) ||
+    /format=(pdf|doc|text)/i.test(cleaned) ||
+    /mediaType=(document|pdf)/i.test(cleaned) ||
+    /(\?|&)(pdf|doc|document)=/i.test(cleaned) ||
+    /\b(pdf|document|gdoc)\b/i.test(cleaned) ||
     cleaned.toLowerCase().includes('application/pdf') ||
     cleaned.toLowerCase().includes('text/')
   ) {
@@ -220,6 +224,7 @@ export function isDriveDocument(urlOrId: string): boolean {
 
   return false;
 }
+
 
 /**
  * Automatically classifies an asset URL or MIME type into a MediaType category.
