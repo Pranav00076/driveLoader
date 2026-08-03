@@ -19,7 +19,9 @@ describe('DriveVideo Component', () => {
     await waitFor(() => {
       const videoEl = container.querySelector('video');
       expect(videoEl).not.toBeNull();
-      expect(videoEl?.getAttribute('src')).toBe(`https://drive.usercontent.google.com/download?id=${VALID_ID}&confirm=t`);
+      expect(videoEl?.getAttribute('src')).toBe(
+        `https://drive.usercontent.google.com/download?id=${VALID_ID}&confirm=t`,
+      );
       expect(videoEl?.hasAttribute('controls')).toBe(true);
     });
   });

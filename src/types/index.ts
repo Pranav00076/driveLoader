@@ -7,6 +7,11 @@ export type DriveUrlFormat =
   'file_d' | 'open_id' | 'uc_id' | 'docs_uc' | 'lh3' | 'usercontent' | 'raw_id' | 'unknown';
 
 /**
+ * Universal media classification.
+ */
+export type MediaType = 'image' | 'video' | 'audio' | 'document' | 'unknown';
+
+/**
  * Configuration options for image resolution.
  */
 export interface ResolveOptions {
@@ -188,8 +193,9 @@ export interface LoadFolderOptions extends ResolveOptions {
   folderId?: string;
   /** Public Google Drive API Key (required for folder list requests) */
   apiKey: string;
-  /** Media types to include ('image', 'video'). Default: ['image', 'video'] */
-  mediaTypes?: ('image' | 'video')[];
+  /** Media types to include ('image', 'video', 'audio', 'document'). Default: ['image', 'video', 'audio', 'document'] */
+  mediaTypes?: ('image' | 'video' | 'audio' | 'document')[];
+
   /** Array of lowercase file extensions to filter (e.g. ['jpg', 'png', 'mp4']) */
   extensions?: string[];
   /** Google Drive API sort ordering (e.g. 'name', 'createdTime', 'modifiedTime', 'quotaBytesUsed', 'folder') */
@@ -491,4 +497,321 @@ export interface UseDriveVideoResult {
   metadata: DriveVideoMetadata | null;
   /** Thumbnail image preview URL, or null */
   thumbnailUrl: string | null;
+}
+
+/**
+ * Storage engines supported by Advanced Cache.
+ */
+export type CacheStorageEngine = 'memory' | 'session' | 'indexeddb';
+
+/**
+ * Metadata associated with a Google Drive audio asset.
+ */
+export interface DriveAudioMetadata {
+  /** Audio title */
+  title?: string;
+  /** Audio artist */
+  artist?: string;
+  /** Duration in seconds */
+  duration: number;
+  /** Audio MIME type (e.g. 'audio/mpeg', 'audio/wav') */
+  mimeType: string;
+  /** File size in bytes */
+  size?: number;
+}
+
+/**
+ * Result returned by resolveDriveAudio.
+ */
+export interface ResolveAudioResult {
+  /** Direct audio stream CDN URL */
+  audioUrl: string;
+  /** File ID */
+  fileId: string;
+  /** Candidate endpoints attempted */
+  attemptedEndpoints: string[];
+  /** Successful endpoint */
+  successfulEndpoint: string;
+  /** Served from cache */
+  fromCache: boolean;
+  /** Audio metadata details */
+  metadata: DriveAudioMetadata;
+}
+
+/**
+ * Props for the DriveAudio React component.
+ */
+export interface DriveAudioProps extends Omit<
+  React.AudioHTMLAttributes<HTMLAudioElement>,
+  'src' | 'placeholder' | 'onError'
+> {
+  /** Google Drive link or file ID */
+  src: string;
+  /** Title of the audio track */
+  title?: string;
+  /** Artist or author of the audio track */
+  artist?: string;
+  /** Display custom waveform visualizer. Default: true */
+  showWaveform?: boolean;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline CSS styles */
+  style?: React.CSSProperties;
+  /** Custom placeholder element while audio is loading */
+  placeholder?: React.ReactNode;
+  /** Custom fallback element if loading fails */
+  fallback?: React.ReactNode;
+  /** Autoplay audio when ready */
+  autoPlay?: boolean;
+  /** Mute audio playback */
+  muted?: boolean;
+  /** Enable memory & persistent caching. Default: true */
+  cache?: boolean;
+  /** Event callback when audio metadata is loaded */
+  onMetadataLoaded?: (metadata: DriveAudioMetadata) => void;
+  /** Event callback on playback error */
+  onError?: (error: Error) => void;
+  /** Event callback when audio resolution completes */
+  onResolveSuccess?: (result: ResolveAudioResult) => void;
+}
+
+/**
+ * Result returned by the useDriveAudio hook.
+ */
+export interface UseDriveAudioResult {
+  /** Resolved audio URL */
+  audioUrl: string | null;
+  /** Is loading flag */
+  loading: boolean;
+  /** Error object if failed */
+  error: Error | null;
+  /** Audio metadata */
+  metadata: DriveAudioMetadata | null;
+  /** Play state */
+  isPlaying: boolean;
+  /** Current playback timestamp in seconds */
+  currentTime: number;
+  /** Total duration in seconds */
+  duration: number;
+  /** Volume level (0.0 to 1.0) */
+  volume: number;
+  /** Array of normalized audio amplitude peaks (for waveform rendering) */
+  peaks: number[];
+  /** Play trigger function */
+  play: () => Promise<void>;
+  /** Pause trigger function */
+  pause: () => void;
+  /** Seek to target second timestamp */
+  seek: (time: number) => void;
+  /** Set volume level (0.0 to 1.0) */
+  setVolume: (volume: number) => void;
+  /** Reload audio resolution */
+  reload: () => void;
+}
+
+/**
+ * Item definition for DrivePlaylist.
+ */
+export interface DrivePlaylistItem {
+  src: string;
+  title?: string;
+  artist?: string;
+  coverArt?: string;
+}
+
+/**
+ * Props for DrivePlaylist component.
+ */
+export interface DrivePlaylistProps {
+  /** Array of audio track URLs or track objects */
+  tracks: Array<string | DrivePlaylistItem>;
+  /** Index of track to start playback with. Default: 0 */
+  initialTrackIndex?: number;
+  /** Enable auto advance to next track on track end. Default: true */
+  autoAdvance?: boolean;
+  /** Loop playlist upon finishing. Default: false */
+  loop?: boolean;
+  /** Additional CSS class */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+  /** Callback fired when active track changes */
+  onTrackChange?: (track: DrivePlaylistItem, index: number) => void;
+}
+
+/**
+ * Result returned by resolveDriveDocument.
+ */
+export interface ResolveDocumentResult {
+  /** Document embed / view URL */
+  documentUrl: string;
+  /** File ID */
+  fileId: string;
+  /** Document format classification ('pdf' | 'txt' | 'md' | 'gdoc') */
+  format: 'pdf' | 'txt' | 'md' | 'gdoc';
+  /** Text or markdown content if format is txt/md */
+  content?: string;
+  /** Extracted image candidate URLs if PDF contains images */
+  extractedImages?: string[];
+  /** Served from cache */
+  fromCache: boolean;
+}
+
+/**
+ * Props for the DriveDocument React component.
+ */
+export interface DriveDocumentProps {
+  /** Google Drive document link or file ID */
+  src: string;
+  /** Width of the document container */
+  width?: number | string;
+  /** Height of the document container */
+  height?: number | string;
+  /** Display mode ('preview' | 'text' | 'markdown' | 'auto'). Default: 'auto' */
+  mode?: 'preview' | 'text' | 'markdown' | 'auto';
+  /** Page number for PDF document view. Default: 1 */
+  page?: number;
+  /** Initial zoom level scale (e.g. 1.0 = 100%). Default: 1.0 */
+  zoom?: number;
+  /** Additional CSS class */
+  className?: string;
+  /** Inline CSS styles */
+  style?: React.CSSProperties;
+  /** Custom placeholder element */
+  placeholder?: React.ReactNode;
+  /** Custom fallback element */
+  fallback?: React.ReactNode;
+  /** Event callback on document resolution success */
+  onResolveSuccess?: (result: ResolveDocumentResult) => void;
+  /** Event callback on document resolution error */
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Result returned by the useDriveDocument hook.
+ */
+export interface UseDriveDocumentResult {
+  /** Document preview URL or raw text content */
+  documentUrl: string | null;
+  /** Detected format variant */
+  format: 'pdf' | 'txt' | 'md' | 'gdoc' | null;
+  /** Raw text content for TXT/Markdown documents */
+  content: string | null;
+  /** Is resolution in progress */
+  loading: boolean;
+  /** Error object if resolution failed */
+  error: Error | null;
+  /** Current page index */
+  page: number;
+  /** Total detected pages count */
+  totalPages: number;
+  /** Current zoom level multiplier */
+  zoom: number;
+  /** Function to change page */
+  setPage: (page: number) => void;
+  /** Function to set zoom scale */
+  setZoom: (zoom: number) => void;
+  /** Trigger document download */
+  download: () => void;
+  /** Reload document resolution */
+  reload: () => void;
+}
+
+/**
+ * Props for Universal DriveMedia React component.
+ */
+export interface DriveMediaProps {
+  /** Google Drive media asset link or file ID */
+  src: string;
+  /** Explicit media type override ('image' | 'video' | 'audio' | 'document' | 'auto'). Default: 'auto' */
+  type?: 'image' | 'video' | 'audio' | 'document' | 'auto';
+  /** Alternative description text for images/media */
+  alt?: string;
+  /** Width constraint */
+  width?: number | string;
+  /** Height constraint */
+  height?: number | string;
+  /** Media controls for video/audio/document preview */
+  controls?: boolean;
+  /** Autoplay media when loaded */
+  autoPlay?: boolean;
+  /** Mute audio output */
+  muted?: boolean;
+  /** Loop playback */
+  loop?: boolean;
+  /** CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+  /** Custom placeholder React element */
+  placeholder?: React.ReactNode;
+  /** Custom fallback React element */
+  fallback?: React.ReactNode;
+  /** Image object-fit styling property */
+  objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+  /** Event callback when media finishes loading */
+  onLoad?: (event?: unknown) => void;
+  /** Event callback when media loading fails */
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Cache inspection item details for Developer Debugging Mode.
+ */
+export interface CacheEntryDetails {
+  key: string;
+  url: string;
+  engine: CacheStorageEngine;
+  createdAt: number;
+  expiresAt: number;
+  sizeBytes?: number;
+  hitCount: number;
+}
+
+/**
+ * Output returned by inspectCache().
+ */
+export interface CacheInspectionResult {
+  stats: CacheStats;
+  entries: CacheEntryDetails[];
+}
+
+/**
+ * Options for searching, sorting, and filtering folder contents.
+ */
+export interface FolderQueryOptions {
+  /** Search query string to filter by file name or text content */
+  searchQuery?: string;
+  /** Property to sort assets by ('name' | 'createdTime' | 'modifiedTime' | 'size') */
+  sortBy?: 'name' | 'createdTime' | 'modifiedTime' | 'size';
+  /** Sort direction ('asc' | 'desc') */
+  sortOrder?: 'asc' | 'desc';
+  /** Filter by specific media type category ('image' | 'video' | 'audio' | 'document') */
+  filterByType?: MediaType;
+  /** Filter by specific MIME type string */
+  filterByMime?: string;
+  /** Enable recursive nested folder scanning */
+  recursive?: boolean;
+}
+
+/**
+ * Performance metric data emitted by DriveLoader telemetry.
+ */
+export interface PerformanceMetric {
+  name: string;
+  fileId?: string;
+  durationMs: number;
+  timestamp: number;
+  fromCache?: boolean;
+  successfulEndpoint?: string;
+}
+
+/**
+ * Diagnostic log item emitted during developer mode resolution.
+ */
+export interface DebugLog {
+  timestamp: number;
+  level: 'info' | 'warn' | 'error' | 'debug';
+  message: string;
+  details?: unknown;
 }

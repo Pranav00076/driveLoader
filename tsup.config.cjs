@@ -1,6 +1,10 @@
 module.exports = {
-  entry: ['src/index.ts'],
+  entry: {
+    index: 'src/index.ts',
+    'cli/index': 'src/cli/index.ts',
+  },
   format: ['cjs', 'esm'],
+
   dts: true,
   clean: true,
   sourcemap: true,

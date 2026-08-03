@@ -206,7 +206,13 @@ export const DriveVideo = forwardRef<DriveVideoRef, DriveVideoProps>(function Dr
           width="100%"
           height="100%"
           allow="autoplay; fullscreen"
-          style={{ border: 0, borderRadius: '8px', width: '100%', height: '100%', minHeight: '240px' }}
+          style={{
+            border: 0,
+            borderRadius: '8px',
+            width: '100%',
+            height: '100%',
+            minHeight: '240px',
+          }}
         />
       </div>
     );

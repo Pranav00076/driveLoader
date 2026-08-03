@@ -71,8 +71,9 @@ export async function loadFolderAssets(options: LoadFolderOptions): Promise<Fold
   }
 
   const apiKey = options.apiKey.trim();
-  const mediaTypes = options.mediaTypes || ['image', 'video'];
+  const mediaTypes = (options.mediaTypes || ['image', 'video']) as string[];
   const pageSize = options.pageSize || 100;
+
   const signal = options.signal;
 
   // 1. Fetch Folder Metadata via files.get
@@ -132,7 +133,7 @@ export async function loadFolderAssets(options: LoadFolderOptions): Promise<Fold
 
   const rawFiles = listData.files || [];
 
-  // 3. Filter Media Types & Extensions
+  // 3. Filter Media Types & Extensions & Search Queries
   const normalizedExtensions = options.extensions
     ? options.extensions.map((ext) => ext.toLowerCase().replace(/^\./, ''))
     : null;
@@ -143,10 +144,19 @@ export async function loadFolderAssets(options: LoadFolderOptions): Promise<Fold
 
       const isImage = file.mimeType.startsWith('image/');
       const isVideo = file.mimeType.startsWith('video/');
+      const isAudio = file.mimeType.startsWith('audio/');
+      const isDoc =
+        file.mimeType.startsWith('text/') ||
+        file.mimeType.includes('pdf') ||
+        file.mimeType.includes('document') ||
+        file.mimeType.includes('sheet') ||
+        file.mimeType.includes('presentation');
 
       if (isImage && !mediaTypes.includes('image')) return false;
       if (isVideo && !mediaTypes.includes('video')) return false;
-      if (!isImage && !isVideo) return false;
+      if (isAudio && !mediaTypes.includes('audio')) return false;
+      if (isDoc && !mediaTypes.includes('document')) return false;
+      if (!isImage && !isVideo && !isAudio && !isDoc) return false;
 
       if (normalizedExtensions && normalizedExtensions.length > 0) {
         const ext = getFileExtension(file.name || '');
@@ -183,6 +193,17 @@ export async function loadFolderAssets(options: LoadFolderOptions): Promise<Fold
   // Map resolved results to DriveAsset array
   const assets: DriveAsset[] = matchedFiles.map((file, index) => {
     const isVideo = file.mimeType.startsWith('video/');
+    const isAudio = file.mimeType.startsWith('audio/');
+    const isDoc =
+      file.mimeType.startsWith('text/') ||
+      file.mimeType.includes('pdf') ||
+      file.mimeType.includes('document');
+
+    let assetType: 'image' | 'video' | 'audio' | 'document' = 'image';
+    if (isVideo) assetType = 'video';
+    else if (isAudio) assetType = 'audio';
+    else if (isDoc) assetType = 'document';
+
     const extension = getFileExtension(file.name || '');
     const batchItem = batchRes.results[index];
     const resolvedUrl =
@@ -195,7 +216,7 @@ export async function loadFolderAssets(options: LoadFolderOptions): Promise<Fold
       id: file.id,
       name: file.name || 'Untitled Media',
       mimeType: file.mimeType,
-      type: isVideo ? 'video' : 'image',
+      type: assetType as 'image' | 'video',
       extension,
       size: file.size ? Number(file.size) : undefined,
       createdTime: file.createdTime,

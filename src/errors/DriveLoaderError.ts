@@ -204,3 +204,81 @@ export class UnsupportedVideoFormatError extends DriveLoaderError {
     }
   }
 }
+
+/**
+ * Thrown when resolving a Google Drive audio file fails across candidate endpoints.
+ */
+export class AudioResolutionError extends DriveLoaderError {
+  public readonly fileId: string;
+  public readonly attemptedEndpoints: string[];
+
+  constructor(fileId: string, attemptedEndpoints: string[], lastError?: Error) {
+    const formattedMessage =
+      `Failed to resolve audio for Google Drive file ID "${fileId}". All ${attemptedEndpoints.length} candidate endpoints failed.` +
+      ` Ensure public sharing is enabled for the audio file.`;
+    super(formattedMessage, 'AUDIO_RESOLUTION_FAILED', {
+      fileId,
+      attemptedEndpoints,
+      lastErrorMsg: lastError?.message,
+    });
+    this.name = 'AudioResolutionError';
+    this.fileId = fileId;
+    this.attemptedEndpoints = attemptedEndpoints;
+  }
+}
+
+/**
+ * Thrown when resolving a Google Drive document fails.
+ */
+export class DocumentResolutionError extends DriveLoaderError {
+  public readonly fileId: string;
+
+  constructor(fileId: string, message?: string) {
+    const formattedMessage =
+      message || `Failed to resolve document for Google Drive file ID "${fileId}".`;
+    super(formattedMessage, 'DOCUMENT_RESOLUTION_FAILED', { fileId });
+    this.name = 'DocumentResolutionError';
+    this.fileId = fileId;
+  }
+}
+
+/**
+ * Thrown when IndexedDB or SessionStorage caching encounters a storage error.
+ */
+export class CacheStorageError extends DriveLoaderError {
+  public readonly engine: string;
+
+  constructor(engine: string, message: string) {
+    super(`Cache Storage Error [${engine}]: ${message}`, 'CACHE_STORAGE_ERROR', { engine });
+    this.name = 'CacheStorageError';
+    this.engine = engine;
+  }
+}
+
+/**
+ * Thrown when an audio format is not supported by HTML5 Audio.
+ */
+export class UnsupportedAudioFormatError extends DriveLoaderError {
+  public readonly format: string;
+
+  constructor(format: string, message?: string) {
+    const formattedMessage = message || `Unsupported audio format or extension: "${format}".`;
+    super(formattedMessage, 'UNSUPPORTED_AUDIO_FORMAT', { format });
+    this.name = 'UnsupportedAudioFormatError';
+    this.format = format;
+  }
+}
+
+/**
+ * Thrown when a document format is not supported for previewing.
+ */
+export class UnsupportedDocumentFormatError extends DriveLoaderError {
+  public readonly format: string;
+
+  constructor(format: string, message?: string) {
+    const formattedMessage = message || `Unsupported document format or extension: "${format}".`;
+    super(formattedMessage, 'UNSUPPORTED_DOCUMENT_FORMAT', { format });
+    this.name = 'UnsupportedDocumentFormatError';
+    this.format = format;
+  }
+}

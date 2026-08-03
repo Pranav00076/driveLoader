@@ -1,8 +1,17 @@
 import { defaultCache } from '../cache/MemoryCache';
+import { defaultStorageEngine } from '../cache/StorageEngine';
 import { getActiveRequestCount } from '../core/resolver';
-import type { CacheStats } from '../types/index';
+import type { CacheInspectionResult, CacheStats } from '../types/index';
 
-export { extractFileId, isGoogleDriveUrl, detectUrlFormat, isDriveVideo } from '../core/parser';
+export {
+  extractFileId,
+  isGoogleDriveUrl,
+  detectUrlFormat,
+  isDriveVideo,
+  isDriveAudio,
+  isDriveDocument,
+  detectMediaType,
+} from '../core/parser';
 export { extractFolderId, isGoogleDriveFolder } from '../core/folderParser';
 export { generateCandidateUrls } from '../core/candidateGenerator';
 export { resolveDriveImage, resolveDriveVideo, configureDriveLoader } from '../core/resolver';
@@ -22,6 +31,7 @@ export { extractVideoMetadata, getVideoThumbnail } from '../core/videoMetadata';
  */
 export function clearCache(): void {
   defaultCache.clear();
+  defaultStorageEngine.clear();
 }
 
 /**
@@ -37,4 +47,13 @@ export function clearCache(): void {
  */
 export function getCacheStats(): CacheStats {
   return defaultCache.getStats(getActiveRequestCount());
+}
+
+/**
+ * Inspects all cached entries across Memory, SessionStorage, and IndexedDB.
+ *
+ * @returns Promise resolving to CacheInspectionResult with stats and detailed entry items.
+ */
+export async function inspectCache(): Promise<CacheInspectionResult> {
+  return defaultStorageEngine.inspectCache();
 }

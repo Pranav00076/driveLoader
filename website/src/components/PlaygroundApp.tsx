@@ -4,7 +4,12 @@ import React, { useState } from "react";
 import {
   DriveImage,
   DriveVideo,
+  DriveAudio,
+  DrivePlaylist,
+  DriveDocument,
+  DriveMedia,
   DriveGallery,
+  DriveDebugOverlay,
   useDriveFolder,
   analyzeDriveUrl,
   getCacheStats,
@@ -15,6 +20,7 @@ import {
   getVideoThumbnail,
   extractVideoMetadata,
 } from "@driveloader/react";
+
 import {
   Image as ImageIcon,
   Video,
@@ -35,7 +41,7 @@ import {
 } from "lucide-react";
 
 export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string }) {
-  const [tab, setTab] = useState<"image" | "video" | "folder" | "resolver">(initialTab as any);
+  const [tab, setTab] = useState<"media" | "image" | "video" | "audio" | "document" | "folder" | "resolver">(initialTab as any);
 
   // Single Image State
   const [imageUrlInput, setImageUrlInput] = useState(
@@ -56,8 +62,6 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
     "https://drive.google.com/drive/folders/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs"
   );
   const [apiKeyInput, setApiKeyInput] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [loadFolder, setLoadFolder] = useState(false);
 
   // Resolver Diagnostics State
   const [resolverInput, setResolverInput] = useState(
@@ -65,8 +69,20 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
   );
   const [diagnosticResult, setDiagnosticResult] = useState<any | null>(null);
 
+  // Audio, Document & Media State
+  const [audioUrlInput, setAudioUrlInput] = useState(
+    "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view?type=audio"
+  );
+  const [docUrlInput, setDocUrlInput] = useState(
+    "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view?type=document"
+  );
+  const [mediaUrlInput, setMediaUrlInput] = useState(
+    "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view"
+  );
+
   // Cache stats
   const [cacheStats, setCacheStats] = useState(getCacheStats());
+
 
   const handleResolveImageManual = async () => {
     setImageResolving(true);
@@ -118,14 +134,18 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
 
   return (
     <div className="w-full space-y-6">
+
       {/* Playground Tabs Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-2xl glass-panel">
         <div className="flex items-center gap-1.5 overflow-x-auto max-w-full scrollbar-none pb-0.5 w-full sm:w-auto">
           {[
-            { id: "image", label: "Single Image", icon: ImageIcon },
-            { id: "video", label: "Video Player", icon: Video },
+            { id: "media", label: "Universal <DriveMedia>", icon: Sparkles },
+            { id: "image", label: "DriveImage", icon: ImageIcon },
+            { id: "video", label: "DriveVideo", icon: Video },
+            { id: "audio", label: "DriveAudio", icon: Play },
+            { id: "document", label: "DriveDocument", icon: Info },
             { id: "folder", label: "Folder Loader", icon: Folder },
-            { id: "resolver", label: "Resolver Diagnostics", icon: Cpu },
+            { id: "resolver", label: "Diagnostics & Cache", icon: Cpu },
           ].map((t) => {
             const Icon = t.icon;
             const active = tab === t.id;
@@ -165,6 +185,7 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
           </button>
         </div>
       </div>
+
 
       {/* TAB 1: SINGLE IMAGE PLAYGROUND */}
       {tab === "image" && (
@@ -421,6 +442,100 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
           )}
         </div>
       )}
+
+      {/* TAB 5: UNIVERSAL DRIVEMEDIA PLAYGROUND */}
+      {tab === "media" && (
+        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-blue-400" />
+              Universal <code className="text-blue-300">&lt;DriveMedia /&gt;</code> Playground
+            </h3>
+            <p className="text-xs text-gray-400">
+              One universal component automatically renders Images, Videos, Audio tracks, or Documents based on file type.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <input
+              type="text"
+              value={mediaUrlInput}
+              onChange={(e) => setMediaUrlInput(e.target.value)}
+              placeholder="Paste any Google Drive asset link..."
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm font-mono focus:border-blue-500 focus:outline-none"
+            />
+
+            <div className="p-6 bg-[#070a13] border border-gray-800 rounded-2xl flex items-center justify-center min-h-[300px]">
+              {React.createElement(DriveMedia as any, { src: mediaUrlInput })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 6: DRIVEAUDIO & PLAYLIST */}
+      {tab === "audio" && (
+        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Play className="w-5 h-5 text-emerald-400" />
+              Google Drive Audio & Playlist Player
+            </h3>
+            <p className="text-xs text-gray-400">
+              Stream Google Drive hosted audio files with custom waveform visualization, seeking, and multi-track playlists.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-gray-300">Single Track Player (&lt;DriveAudio /&gt;)</h4>
+              {React.createElement(DriveAudio as any, { src: audioUrlInput, title: "Drive Audio Demo", artist: "DriveLoader SDK" })}
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-gray-300">Multi-Track Playlist (&lt;DrivePlaylist /&gt;)</h4>
+              {React.createElement(DrivePlaylist as any, {
+                tracks: [
+                  { src: audioUrlInput, title: "Track 1 - Chill Synth", artist: "Google Drive" },
+                  { src: audioUrlInput, title: "Track 2 - Acoustic Sunset", artist: "DriveLoader" },
+                ],
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 7: DRIVEDOCUMENT */}
+      {tab === "document" && (
+        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Info className="w-5 h-5 text-sky-400" />
+              Google Drive Document Viewer (&lt;DriveDocument /&gt;)
+            </h3>
+            <p className="text-xs text-gray-400">
+              Preview PDFs, text files, and markdown documents directly inside your React app with zoom and page controls.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <input
+              type="text"
+              value={docUrlInput}
+              onChange={(e) => setDocUrlInput(e.target.value)}
+              placeholder="Paste Google Drive document or PDF link..."
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm font-mono focus:border-sky-500 focus:outline-none"
+            />
+
+            <div className="h-[550px] bg-[#070a13] border border-gray-800 rounded-2xl overflow-hidden">
+              {React.createElement(DriveDocument as any, { src: docUrlInput, height: "550px" })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Developer Debugger Overlay */}
+      {React.createElement(DriveDebugOverlay as any, { initialOpen: false })}
     </div>
   );
 }
+

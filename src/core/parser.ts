@@ -107,6 +107,9 @@ export function detectUrlFormat(urlOrId: string): DriveUrlFormat {
 }
 
 const VIDEO_EXTENSIONS_REGEX = /\.(mp4|webm|ogg|mov|mkv|m4v|avi|3gp|flv)(\?.*)?$/i;
+const AUDIO_EXTENSIONS_REGEX = /\.(mp3|wav|aac|ogg|flac|m4a|wma|opus|aiff)(\?.*)?$/i;
+const DOCUMENT_EXTENSIONS_REGEX = /\.(pdf|txt|md|doc|docx|xls|xlsx|ppt|pptx|rtf|csv|json)(\?.*)?$/i;
+const IMAGE_EXTENSIONS_REGEX = /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico|tiff|heic|avif)(\?.*)?$/i;
 
 /**
  * Checks whether a given string or URL represents a Google Drive video asset.
@@ -151,4 +154,112 @@ export function isDriveVideo(urlOrId: string): boolean {
   }
 
   return false;
+}
+
+/**
+ * Checks whether a given string or URL represents a Google Drive audio asset.
+ *
+ * @param urlOrId - The input Google Drive link, raw file ID, or media URL string.
+ * @returns `true` if identified as an audio asset, `false` otherwise.
+ */
+export function isDriveAudio(urlOrId: string): boolean {
+  if (!urlOrId || typeof urlOrId !== 'string') {
+    return false;
+  }
+
+  const cleaned = urlOrId.trim();
+  if (!cleaned) {
+    return false;
+  }
+
+  if (AUDIO_EXTENSIONS_REGEX.test(cleaned)) {
+    return true;
+  }
+
+  if (cleaned.toLowerCase().includes('audio/') || /type=audio/i.test(cleaned)) {
+    return true;
+  }
+
+  if (/\baudio\b/i.test(cleaned)) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Checks whether a given string or URL represents a document (PDF, TXT, MD, Docs).
+ *
+ * @param urlOrId - The input Google Drive link or file ID string.
+ * @returns `true` if identified as a document asset, `false` otherwise.
+ */
+export function isDriveDocument(urlOrId: string): boolean {
+  if (!urlOrId || typeof urlOrId !== 'string') {
+    return false;
+  }
+
+  const cleaned = urlOrId.trim();
+  if (!cleaned) {
+    return false;
+  }
+
+  if (DOCUMENT_EXTENSIONS_REGEX.test(cleaned)) {
+    return true;
+  }
+
+  if (
+    cleaned.includes('docs.google.com/document') ||
+    cleaned.includes('docs.google.com/spreadsheets') ||
+    cleaned.includes('docs.google.com/presentation') ||
+    /type=document/i.test(cleaned) ||
+    cleaned.toLowerCase().includes('application/pdf') ||
+    cleaned.toLowerCase().includes('text/')
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Automatically classifies an asset URL or MIME type into a MediaType category.
+ *
+ * @param urlOrId - The input Google Drive link or raw string.
+ * @param mimeType - Optional known MIME type.
+ * @returns Classified MediaType ('image' | 'video' | 'audio' | 'document' | 'unknown').
+ */
+export function detectMediaType(
+  urlOrId: string,
+  mimeType?: string,
+): 'image' | 'video' | 'audio' | 'document' | 'unknown' {
+  if (mimeType) {
+    const lowerMime = mimeType.toLowerCase();
+    if (lowerMime.startsWith('image/')) return 'image';
+    if (lowerMime.startsWith('video/')) return 'video';
+    if (lowerMime.startsWith('audio/')) return 'audio';
+    if (
+      lowerMime.startsWith('text/') ||
+      lowerMime.includes('pdf') ||
+      lowerMime.includes('document') ||
+      lowerMime.includes('sheet') ||
+      lowerMime.includes('presentation')
+    ) {
+      return 'document';
+    }
+  }
+
+  if (isDriveVideo(urlOrId)) return 'video';
+  if (isDriveAudio(urlOrId)) return 'audio';
+  if (isDriveDocument(urlOrId)) return 'document';
+
+  const cleaned = (urlOrId || '').trim();
+  if (
+    IMAGE_EXTENSIONS_REGEX.test(cleaned) ||
+    /\bimage\b/i.test(cleaned) ||
+    isGoogleDriveUrl(cleaned)
+  ) {
+    return 'image';
+  }
+
+  return 'unknown';
 }

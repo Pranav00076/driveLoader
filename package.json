@@ -2,14 +2,12 @@
   "name": "@driveloader/react",
   "version": "1.2.0",
   "description": "The definitive React library for loading, caching, and resolving Google Drive hosted images.",
-
   "publishConfig": {
     "access": "public"
   },
   "author": "DriveLoader Contributors",
   "license": "MIT",
   "homepage": "https://drive-loader.vercel.app/",
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pranav00076/driveLoader.git"
@@ -32,6 +30,9 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "driveloader": "./bin/driveloader.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -49,11 +50,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup --config tsup.config.cjs",
-
-
     "build:docs": "npm run build && npm run build --prefix website",
-
-
     "preview:docs": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -64,7 +61,6 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,json,md}\"",
     "changeset": "changeset",
     "prepare": "husky || true"
-
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -75,7 +71,6 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-
     "@changesets/cli": "^2.27.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
@@ -85,6 +80,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-v8": "^1.6.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -26,18 +26,19 @@ Simply pass **any** Google Drive link or file ID to `<DriveImage />` or `<DriveV
 
 ## 🚀 Key Features
 
-- ✅ **Google Drive Images**: Render Google Drive images with skeletons, smooth fade transitions, lazy loading, and failover endpoints.
-- 🎥 **Google Drive Videos**: Stream Google Drive videos using `<DriveVideo />` with poster thumbnails, HTML5 controls, and metadata extraction.
-- 🖼️ **Mixed Media Galleries**: Responsive `<DriveGallery />` automatically detects media types and renders images and videos side-by-side.
-- 📁 **Public Folder Loading**: Fetch all media assets (images & videos) from any public Google Drive folder using official Google Drive API v3.
-- 🧠 **Endpoint Learning**: Automatically remembers working CDN endpoints per file ID and prioritizes them in future resolutions.
-- 🔄 **Pagination & Sorting**: Support for `loadMore()`, page tokens, sorting (`name`, `createdTime`, `modifiedTime`), and extension filtering (`['jpg', 'png', 'mp4']`).
-- ⚡ **Request Coalescing**: Prevents duplicate network requests when rendering multiple instances of the same asset across your application.
-- 📦 **Batch Resolution**: Concurrently resolves arrays of URLs with `resolveDriveImages()` and worker concurrency queue controls.
-- 🔍 **Diagnostics API**: `analyzeDriveUrl(url)` inspects link validity, format variants, TTL, and actionable recommendations.
-- 📊 **Cache Metrics**: Real-time stats (`getCacheStats()`) on hit rates, active requests, and memory usage.
-- 🛡️ **Typed Error Hierarchy**: Actionable custom errors (`InvalidDriveUrlError`, `InvalidVideoError`, `VideoResolutionError`, `PrivateFileError`, `ResolutionFailedError`).
-- ⚡ **Zero Runtime Dependencies**: Ultra-lightweight and tree-shakeable.
+- 🌟 **Universal `<DriveMedia />`**: Single component auto-detects images, videos, audio tracks, and documents.
+- 🖼️ **Google Drive Images (`<DriveImage />`)**: Render Google Drive images with skeletons, smooth fade transitions, responsive `srcSet`, adaptive quality, and failover endpoints.
+- 🎥 **Google Drive Videos (`<DriveVideo />`)**: Stream Google Drive videos using `<DriveVideo />` with poster thumbnails, HTML5 controls, and metadata extraction.
+- 🎵 **Google Drive Audio (`<DriveAudio />` & `<DrivePlaylist />`)**: Stream MP3, WAV, AAC, OGG, FLAC, M4A with waveform visualization canvas, seek controls, and track playlists.
+- 📄 **Google Drive Documents (`<DriveDocument />`)**: View PDFs, TXT, and Markdown documents with zoom and page controls.
+- 🖼️ **Mixed Media Galleries**: Responsive `<DriveGallery />` automatically detects media types and renders images, videos, audio, and docs.
+- 📁 **Public Folder Features**: Fetch, search, sort, filter, and page through public Google Drive folders with recursive nested scanning.
+- 💾 **Advanced Multi-Tier Cache**: Memory Cache + Persistent SessionStorage + IndexedDB with TTL, versioning, offline mode, and `inspectCache()`.
+- ⚡ **Smart Prefetch**: `prefetch()`, `prefetchFolder()`, `prefetchGallery()`, `prefetchVideo()`, `prefetchAudio()`, `prefetchDocument()` with hover/viewport triggers.
+- 🛠️ **CLI Tool (`npx driveloader`)**: Validate links, resolve URLs, inspect folders, clear cache, and generate TypeScript types.
+- ⚛️ **Next.js & React 19 Ready**: `<Image>` loader helper (`createDriveNextLoader()`), Server Actions, Edge Runtime, and Suspense (`useDriveImageSuspense`).
+- 📊 **Developer Inspector HUD**: On-screen `<DriveDebugOverlay />` showing live cache hits, latency metrics, and candidate endpoints.
+
 
 ---
 
