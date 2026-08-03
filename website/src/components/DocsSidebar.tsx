@@ -20,29 +20,34 @@ export function DocsSidebar() {
     {
       title: "Core Components",
       items: [
+        { name: "<DriveMedia />", href: "/docs/drive-media", slug: "drive-media" },
         { name: "<DriveImage />", href: "/docs/drive-image", slug: "drive-image" },
         { name: "<DriveVideo />", href: "/docs/drive-video", slug: "drive-video" },
+        { name: "<DriveAudio />", href: "/docs/drive-audio", slug: "drive-audio" },
+        { name: "<DriveDocument />", href: "/docs/drive-document", slug: "drive-document" },
         { name: "<DriveGallery />", href: "/docs/drive-gallery", slug: "drive-gallery" },
       ],
     },
     {
-      title: "Features & API",
+      title: "Features & Ecosystem",
       items: [
+        { name: "CLI Tool (npx driveloader)", href: "/docs/cli", slug: "cli" },
+        { name: "Advanced Cache Engine", href: "/docs/caching", slug: "caching" },
+        { name: "Next.js & React 19", href: "/docs/nextjs-react19", slug: "nextjs-react19" },
+        { name: "Inspector HUD (<DriveDebugOverlay />)", href: "/docs/debug-hud", slug: "debug-hud" },
         { name: "Public Folder Support", href: "/docs/folder-support", slug: "folder-support" },
         { name: "Custom React Hooks", href: "/docs/hooks", slug: "hooks" },
         { name: "Core Utilities", href: "/docs/utilities", slug: "utilities" },
-        { name: "Caching & Memory", href: "/docs/caching", slug: "caching" },
-        { name: "Retry & Failover Engine", href: "/docs/retry-logic", slug: "retry-logic" },
-        { name: "Performance Optimization", href: "/docs/performance", slug: "performance" },
       ],
     },
     {
       title: "Resources",
       items: [
-        { name: "Migration Guide (v1.2.0)", href: "/docs/migration-guide", slug: "migration-guide" },
+        { name: "Migration Guide", href: "/docs/migration-guide", slug: "migration-guide" },
         { name: "FAQ & Troubleshooting", href: "/docs/faq", slug: "faq" },
       ],
     },
+
   ];
 
   const currentItem = sections.flatMap((s) => s.items).find((i) => pathname === i.href || (i.slug === "introduction" && pathname === "/docs"));

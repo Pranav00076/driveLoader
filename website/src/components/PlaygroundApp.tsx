@@ -485,24 +485,35 @@ export function PlaygroundApp({ initialTab = "image" }: { initialTab?: string })
             </p>
           </div>
 
+          <div className="flex flex-col md:flex-row gap-3">
+            <input
+              type="text"
+              value={audioUrlInput}
+              onChange={(e) => setAudioUrlInput(e.target.value)}
+              placeholder="Paste Google Drive audio link (MP3, WAV, AAC, OGG, FLAC, M4A) or File ID..."
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-xs sm:text-sm font-mono focus:border-emerald-500 focus:outline-none w-full min-w-0"
+            />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-3">
               <h4 className="text-sm font-semibold text-gray-300">Single Track Player (&lt;DriveAudio /&gt;)</h4>
-              {React.createElement(DriveAudio as any, { src: audioUrlInput, title: "Drive Audio Demo", artist: "DriveLoader SDK" })}
+              {React.createElement(DriveAudio as any, { src: audioUrlInput, title: "Drive Audio Track", artist: "DriveLoader SDK" })}
             </div>
 
             <div className="space-y-3">
               <h4 className="text-sm font-semibold text-gray-300">Multi-Track Playlist (&lt;DrivePlaylist /&gt;)</h4>
               {React.createElement(DrivePlaylist as any, {
                 tracks: [
-                  { src: audioUrlInput, title: "Track 1 - Chill Synth", artist: "Google Drive" },
-                  { src: audioUrlInput, title: "Track 2 - Acoustic Sunset", artist: "DriveLoader" },
+                  { src: audioUrlInput, title: "Track 1 - Custom Audio", artist: "Google Drive" },
+                  { src: audioUrlInput, title: "Track 2 - Drive Stream", artist: "DriveLoader" },
                 ],
               })}
             </div>
           </div>
         </div>
       )}
+
 
       {/* TAB 7: DRIVEDOCUMENT */}
       {tab === "document" && (
