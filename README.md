@@ -44,47 +44,37 @@ Simply pass **any** Google Drive link or file ID to `<DriveImage />` or `<DriveV
 
 ## ⚡ Quick Start
 
-### 🖼️ Single Image Component (`DriveImage`)
+### 🌐 Universal Component (`DriveMedia`)
+
+The easiest way to render **any** Google Drive asset. It auto-detects if the URL points to an image, video, audio track, or document.
 
 ```tsx
-import { DriveImage } from '@driveloader/react';
+import { DriveMedia } from '@driveloader/react';
 import '@driveloader/react/styles.css';
 
-export function ProfileAvatar() {
+export function App() {
   return (
-    <DriveImage
-      src="https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view"
-      alt="User Profile"
-      width={120}
-      height={120}
-      fade={true}
+    <DriveMedia 
+      src="https://drive.google.com/file/d/FILE_ID/view" 
+      controls 
+      autoPlay={false} 
     />
   );
 }
 ```
 
-### 🎥 Single Video Component (`DriveVideo`)
+### 🛠️ CLI Tool
 
-```tsx
-import { DriveVideo } from '@driveloader/react';
-import '@driveloader/react/styles.css';
+DriveLoader includes a powerful CLI for debugging and cache management.
 
-export function VideoPlayer({ driveUrl }: { driveUrl: string }) {
-  return (
-    <DriveVideo
-      src={driveUrl}
-      controls
-      autoPlay={false}
-      muted={false}
-      preload="metadata"
-      width={640}
-      height={360}
-    />
-  );
-}
+```bash
+npx driveloader validate "https://drive.google.com/file/d/ID/view"
+npx driveloader doctor
+npx driveloader benchmark
+npx driveloader clear-cache
 ```
 
-### 🎬 Video Resolution Hook (`useDriveVideo`)
+### 🎬 Advanced Hooks (`useDriveVideo`, `useDriveAudio`)
 
 ```tsx
 import { useDriveVideo } from '@driveloader/react';
@@ -92,13 +82,13 @@ import { useDriveVideo } from '@driveloader/react';
 function VideoDetails({ driveUrl }: { driveUrl: string }) {
   const { videoUrl, loading, error, metadata, thumbnailUrl } = useDriveVideo(driveUrl);
 
-  if (loading) return <div>Resolving Google Drive Video...</div>;
-  if (error) return <div>Failed to load video: {error.message}</div>;
+  if (loading) return <div>Resolving...</div>;
+  if (error) return <div>Failed: {error.message}</div>; // Actionable error message
 
   return (
     <div>
       <video src={videoUrl!} controls poster={thumbnailUrl || undefined} width={640} />
-      <p>Duration: {metadata?.duration}s | Dimensions: {metadata?.width}x{metadata?.height}</p>
+      <p>Duration: {metadata?.duration}s</p>
     </div>
   );
 }

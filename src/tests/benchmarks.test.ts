@@ -1,9 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import { extractFileId, generateCandidateUrls, detectMediaType } from '../index';
 import { MemoryCache } from '../cache/MemoryCache';
+import { runBenchmark } from '../utils/benchmarkRunner';
 
 describe('Performance Benchmarks & Stress Tests', () => {
-  it('should process 10,000+ file ID extraction and URL detection ops in under 100ms', () => {
+  it('should run benchmark suite across 100, 500, 1000, 5000, and 10000 media assets', () => {
+    const scales = [100, 500, 1000, 5000, 10000];
+    for (const count of scales) {
+      const metric = runBenchmark(count);
+      expect(metric.assetCount).toBe(count);
+      expect(metric.opsPerSec).toBeGreaterThan(100);
+    }
+  });
+
+  it('should process 10,000+ file ID extraction and URL detection ops in under 500ms', () => {
     const testUrls = Array.from(
       { length: 10000 },
       (_, i) => `https://drive.google.com/file/d/1A2b3C4d5E6f7G8h9I0j1K2L3M4N5O${i}/view`,

@@ -70,4 +70,3 @@ export function analyzeDriveUrl(url: string): UrlDiagnostics {
     warnings,
   };
 }
-

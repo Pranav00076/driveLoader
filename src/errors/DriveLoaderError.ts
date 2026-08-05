@@ -25,7 +25,10 @@ export class InvalidDriveUrlError extends DriveLoaderError {
   constructor(inputUrl: string, message?: string) {
     const formattedMessage =
       message ||
-      `Invalid Google Drive URL or File ID format: "${inputUrl}". Expected a valid Google Drive link or 28+ character file ID.`;
+      `[DriveLoader: Invalid URL] What happened: "${inputUrl}" is not a recognized Google Drive URL or File ID.\n` +
+        `• Why it happened: The input link format does not match file/d/ID/view, open?id=ID, uc?id=ID, or a 25-50 character string.\n` +
+        `• How to fix it: Ensure your URL looks like "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view" or pass the raw File ID "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs".\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/faq`;
     super(formattedMessage, 'INVALID_DRIVE_URL', { inputUrl });
     this.name = 'InvalidDriveUrlError';
     this.inputUrl = inputUrl;
@@ -41,7 +44,10 @@ export class PrivateFileError extends DriveLoaderError {
   constructor(fileId: string, message?: string) {
     const formattedMessage =
       message ||
-      `Google Drive image with ID "${fileId}" appears to be private or unaccessible. Please enable "Anyone with the link can view" access in Google Drive sharing settings.`;
+      `[DriveLoader: Private File] What happened: Google Drive asset "${fileId}" is private or restricted.\n` +
+        `• Why it happened: Google Drive requires public permission to generate public CDN stream/image binaries.\n` +
+        `• How to fix it: In Google Drive, click Share -> General access -> Change to "Anyone with the link can view".\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/faq`;
     super(formattedMessage, 'PRIVATE_FILE_ERROR', { fileId });
     this.name = 'PrivateFileError';
     this.fileId = fileId;
@@ -57,8 +63,10 @@ export class ResolutionFailedError extends DriveLoaderError {
 
   constructor(fileId: string, attemptedEndpoints: string[], lastError?: Error) {
     const formattedMessage =
-      `Failed to resolve image for Google Drive file ID "${fileId}". All ${attemptedEndpoints.length} candidate endpoints failed to return a valid image.` +
-      ` Ensure the file is a valid image and public sharing is enabled.`;
+      `[DriveLoader: Resolution Failed] What happened: Failed to resolve direct CDN URL for Google Drive file ID "${fileId}".\n` +
+      `• Why it happened: All ${attemptedEndpoints.length} candidate endpoints failed to respond with a 200 OK media binary.\n` +
+      `• How to fix it: Verify that the file exists, has not been deleted, and public sharing is enabled.\n` +
+      `• Docs: https://drive-loader.vercel.app/docs/retry-logic`;
     super(formattedMessage, 'RESOLUTION_FAILED', {
       fileId,
       attemptedEndpoints,
@@ -78,7 +86,10 @@ export class NoCandidateUrlsError extends DriveLoaderError {
 
   constructor(fileId: string) {
     super(
-      `No candidate URLs could be generated for Google Drive ID "${fileId}".`,
+      `[DriveLoader: No Candidates] What happened: No CDN candidate URLs generated for ID "${fileId}".\n` +
+        `• Why it happened: File ID string is malformed or empty.\n` +
+        `• How to fix it: Provide a valid Google Drive File ID string.\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/utilities`,
       'NO_CANDIDATES',
       {
         fileId,
@@ -108,7 +119,10 @@ export class InvalidFolderError extends DriveLoaderError {
   constructor(inputFolder: string, message?: string) {
     const formattedMessage =
       message ||
-      `Invalid Google Drive Folder URL or Folder ID format: "${inputFolder}". Expected a valid Google Drive folder link (e.g. drive.google.com/drive/folders/FOLDER_ID) or 25+ character ID.`;
+      `[DriveLoader: Invalid Folder] What happened: "${inputFolder}" is not a valid Google Drive Folder link or ID.\n` +
+        `• Why it happened: Expected drive.google.com/drive/folders/FOLDER_ID or a 25+ character Folder ID.\n` +
+        `• How to fix it: Pass a valid folder link or use useDriveFolder({ folderUrl: "..." }).\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/folder-support`;
     super(formattedMessage, 'INVALID_FOLDER', { inputFolder });
     this.name = 'InvalidFolderError';
     this.inputFolder = inputFolder;
@@ -121,7 +135,10 @@ export class InvalidFolderError extends DriveLoaderError {
 export class ApiKeyMissingError extends DriveLoaderError {
   constructor() {
     super(
-      `Google Drive API Key missing. Folder loading requires a valid Google API Key passed via the apiKey option.`,
+      `[DriveLoader: Missing API Key] What happened: Google Drive API Key is required for public folder listings.\n` +
+        `• Why it happened: Public Google Drive folder scanning uses Google Drive API v3 REST endpoint.\n` +
+        `• How to fix it: Pass apiKey option: useDriveFolder({ folderUrl: "...", apiKey: "YOUR_API_KEY" }).\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/folder-support`,
       'API_KEY_MISSING',
     );
     this.name = 'ApiKeyMissingError';
@@ -136,10 +153,17 @@ export class FolderLoadError extends DriveLoaderError {
   public readonly statusCode?: number;
 
   constructor(folderId: string, message: string, statusCode?: number) {
-    super(`Failed to load Google Drive folder "${folderId}": ${message}`, 'FOLDER_LOAD_FAILED', {
-      folderId,
-      statusCode,
-    });
+    super(
+      `[DriveLoader: Folder Load Error] What happened: Failed to load folder "${folderId}": ${message}.\n` +
+        `• Why it happened: Google Drive API returned HTTP ${statusCode || 'error'}.\n` +
+        `• How to fix it: Check API Key quotas and verify folder sharing is set to "Anyone with the link can view".\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/folder-support`,
+      'FOLDER_LOAD_FAILED',
+      {
+        folderId,
+        statusCode,
+      },
+    );
     this.name = 'FolderLoadError';
     this.folderId = folderId;
     this.statusCode = statusCode;
@@ -155,7 +179,10 @@ export class InvalidVideoError extends DriveLoaderError {
   constructor(inputUrl: string, message?: string) {
     const formattedMessage =
       message ||
-      `Invalid Google Drive Video URL or File ID format: "${inputUrl}". Expected a valid Google Drive video link or File ID.`;
+      `[DriveLoader: Invalid Video] What happened: "${inputUrl}" is not a recognized video share link.\n` +
+        `• Why it happened: The input link format could not be parsed into a video file ID.\n` +
+        `• How to fix it: Pass a valid drive link like <DriveVideo src="https://drive.google.com/file/d/VIDEO_ID/view" />.\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/drive-video`;
     super(formattedMessage, 'INVALID_VIDEO_URL', { inputUrl });
     this.name = 'InvalidVideoError';
     this.inputUrl = inputUrl;
@@ -171,8 +198,10 @@ export class VideoResolutionError extends DriveLoaderError {
 
   constructor(fileId: string, attemptedEndpoints: string[], lastError?: Error) {
     const formattedMessage =
-      `Failed to resolve video for Google Drive file ID "${fileId}". All ${attemptedEndpoints.length} candidate endpoints failed.` +
-      ` Ensure public sharing is enabled for the video file.`;
+      `[DriveLoader: Video Resolution Failed] What happened: Failed to stream Google Drive video ID "${fileId}".\n` +
+      `• Why it happened: All ${attemptedEndpoints.length} video stream endpoints failed.\n` +
+      `• How to fix it: Verify that the video is public and Google Drive has processed its preview stream.\n` +
+      `• Docs: https://drive-loader.vercel.app/docs/drive-video`;
     super(formattedMessage, 'VIDEO_RESOLUTION_FAILED', {
       fileId,
       attemptedEndpoints,
@@ -194,7 +223,10 @@ export class UnsupportedVideoFormatError extends DriveLoaderError {
   constructor(mimeTypeOrUrl: string, message?: string) {
     const formattedMessage =
       message ||
-      `Unsupported video format or MIME type: "${mimeTypeOrUrl}". Ensure the video file is formatted as web-compatible MP4, WebM, OGG, or MOV.`;
+      `[DriveLoader: Unsupported Video] What happened: Unsupported video format "${mimeTypeOrUrl}".\n` +
+        `• Why it happened: Browser HTML5 video tag supports MP4, WebM, OGG, or MOV.\n` +
+        `• How to fix it: Convert video to H.264 MP4 format for universal browser support.\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/drive-video`;
     super(formattedMessage, 'UNSUPPORTED_VIDEO_FORMAT', { mimeTypeOrUrl });
     this.name = 'UnsupportedVideoFormatError';
     if (mimeTypeOrUrl.includes('/')) {
@@ -214,8 +246,10 @@ export class AudioResolutionError extends DriveLoaderError {
 
   constructor(fileId: string, attemptedEndpoints: string[], lastError?: Error) {
     const formattedMessage =
-      `Failed to resolve audio for Google Drive file ID "${fileId}". All ${attemptedEndpoints.length} candidate endpoints failed.` +
-      ` Ensure public sharing is enabled for the audio file.`;
+      `[DriveLoader: Audio Resolution Failed] What happened: Failed to resolve audio for Google Drive ID "${fileId}".\n` +
+      `• Why it happened: All ${attemptedEndpoints.length} audio candidate endpoints failed.\n` +
+      `• How to fix it: Verify that the audio file is public and properly uploaded to Google Drive.\n` +
+      `• Docs: https://drive-loader.vercel.app/docs/drive-audio`;
     super(formattedMessage, 'AUDIO_RESOLUTION_FAILED', {
       fileId,
       attemptedEndpoints,
@@ -235,7 +269,11 @@ export class DocumentResolutionError extends DriveLoaderError {
 
   constructor(fileId: string, message?: string) {
     const formattedMessage =
-      message || `Failed to resolve document for Google Drive file ID "${fileId}".`;
+      message ||
+      `[DriveLoader: Document Resolution Failed] What happened: Failed to resolve document for ID "${fileId}".\n` +
+        `• Why it happened: Google Drive document preview embed is unavailable or restricted.\n` +
+        `• How to fix it: Check file permissions and ensure "Anyone with the link can view" is enabled.\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/drive-document`;
     super(formattedMessage, 'DOCUMENT_RESOLUTION_FAILED', { fileId });
     this.name = 'DocumentResolutionError';
     this.fileId = fileId;
@@ -262,7 +300,12 @@ export class UnsupportedAudioFormatError extends DriveLoaderError {
   public readonly format: string;
 
   constructor(format: string, message?: string) {
-    const formattedMessage = message || `Unsupported audio format or extension: "${format}".`;
+    const formattedMessage =
+      message ||
+      `[DriveLoader: Unsupported Audio] What happened: Unsupported audio format "${format}".\n` +
+        `• Why it happened: HTML5 audio requires MP3, WAV, AAC, OGG, FLAC, or M4A.\n` +
+        `• How to fix it: Convert audio to standard MP3 or AAC format.\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/drive-audio`;
     super(formattedMessage, 'UNSUPPORTED_AUDIO_FORMAT', { format });
     this.name = 'UnsupportedAudioFormatError';
     this.format = format;
@@ -276,7 +319,12 @@ export class UnsupportedDocumentFormatError extends DriveLoaderError {
   public readonly format: string;
 
   constructor(format: string, message?: string) {
-    const formattedMessage = message || `Unsupported document format or extension: "${format}".`;
+    const formattedMessage =
+      message ||
+      `[DriveLoader: Unsupported Document] What happened: Unsupported document format "${format}".\n` +
+        `• Why it happened: DriveDocument supports PDF, TXT, MD, and Google Docs.\n` +
+        `• How to fix it: Ensure the document file is saved as PDF, TXT, or MD.\n` +
+        `• Docs: https://drive-loader.vercel.app/docs/drive-document`;
     super(formattedMessage, 'UNSUPPORTED_DOCUMENT_FORMAT', { format });
     this.name = 'UnsupportedDocumentFormatError';
     this.format = format;

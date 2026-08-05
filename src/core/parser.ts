@@ -225,7 +225,6 @@ export function isDriveDocument(urlOrId: string): boolean {
   return false;
 }
 
-
 /**
  * Automatically classifies an asset URL or MIME type into a MediaType category.
  *

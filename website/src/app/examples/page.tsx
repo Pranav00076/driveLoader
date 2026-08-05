@@ -10,6 +10,132 @@ export default function ExamplesPage() {
 
   const examplesList = [
     {
+      id: "universal-media",
+      title: "Universal <DriveMedia /> Auto-Detector",
+      category: "media",
+      description: "One single component automatically detects whether the Google Drive link is an image, video, audio track, or PDF document.",
+      code: `import { DriveMedia } from '@driveloader/react';
+
+export function UniversalAsset({ driveUrl }: { driveUrl: string }) {
+  return (
+    <DriveMedia
+      src={driveUrl}
+      alt="Dynamic Media Asset"
+      controls
+    />
+  );
+}`,
+    },
+    {
+      id: "audio-playlist",
+      title: "Google Drive Audio & Playlist Player",
+      category: "audio",
+      description: "Stream Google Drive hosted audio files with custom waveform visualization canvas and multi-track playlists.",
+      code: `import { DriveAudio, DrivePlaylist } from '@driveloader/react';
+
+export function PodcastPlayer() {
+  return (
+    <DrivePlaylist
+      tracks={[
+        { src: 'https://drive.google.com/file/d/AUDIO_1/view', title: 'Episode 1: Intro', artist: 'DriveLoader' },
+        { src: 'https://drive.google.com/file/d/AUDIO_2/view', title: 'Episode 2: Deep Dive', artist: 'DriveLoader' }
+      ]}
+    />
+  );
+}`,
+    },
+    {
+      id: "document-viewer",
+      title: "PDF & Document Viewer (<DriveDocument />)",
+      category: "document",
+      description: "Preview PDFs, Google Docs, text files, and Markdown directly inside React apps with zoom and download controls.",
+      code: `import { DriveDocument } from '@driveloader/react';
+
+export function DocumentReader({ docUrl }: { docUrl: string }) {
+  return (
+    <DriveDocument
+      src={docUrl}
+      height="600px"
+      width="100%"
+    />
+  );
+}`,
+    },
+    {
+      id: "portfolio-photography",
+      title: "Portfolio & Photography Website",
+      category: "portfolio",
+      description: "High-performance masonry photo gallery with skeleton placeholders, lazy loading, and failover endpoints.",
+      code: `import { DriveGallery } from '@driveloader/react';
+
+export function PhotographyPortfolio({ photoUrls }: { photoUrls: string[] }) {
+  return (
+    <DriveGallery
+      images={photoUrls}
+      columns={{ sm: 1, md: 2, lg: 3 }}
+      gap="1.5rem"
+    />
+  );
+}`,
+    },
+    {
+      id: "nextjs-app-router",
+      title: "Next.js App Router Loader (createDriveNextLoader)",
+      category: "nextjs",
+      description: "Pass a custom loader to Next.js <Image /> component for optimized server-side rendering and CDN delivery.",
+      code: `import Image from 'next/image';
+import { createDriveNextLoader } from '@driveloader/react';
+
+const driveLoader = createDriveNextLoader();
+
+export function ProfileAvatar({ src }: { src: string }) {
+  return (
+    <Image
+      loader={driveLoader}
+      src={src}
+      alt="User Profile"
+      width={300}
+      height={300}
+      priority
+    />
+  );
+}`,
+    },
+    {
+      id: "vite-react-router",
+      title: "Vite & React Router Single Page App",
+      category: "vite",
+      description: "Seamless single page application integration with instant client-side resolution and LRU memory caching.",
+      code: `import { DriveImage, DriveVideo } from '@driveloader/react';
+
+export function ViteApp() {
+  return (
+    <main className="p-8">
+      <DriveImage src="https://drive.google.com/file/d/IMG_ID/view" alt="Vite Demo" />
+      <DriveVideo src="https://drive.google.com/file/d/VID_ID/view" controls />
+    </main>
+  );
+}`,
+    },
+    {
+      id: "course-platform",
+      title: "Course Platform & Video Player",
+      category: "video",
+      description: "Video course streaming platform featuring automatic poster thumbnails and video metadata extraction.",
+      code: `import { DriveVideo, useDriveVideo } from '@driveloader/react';
+
+export function LessonPlayer({ lessonUrl }: { lessonUrl: string }) {
+  const { metadata, loading } = useDriveVideo(lessonUrl);
+
+  return (
+    <div>
+      <DriveVideo src={lessonUrl} controls autoPlay={false} />
+      {!loading && <p>Lesson Length: {metadata?.duration} seconds</p>}
+    </div>
+  );
+}`,
+    },
+    {
       id: "basic-image",
       title: "Basic Image Component",
       category: "image",
@@ -29,57 +155,17 @@ export function Avatar() {
 }`,
     },
     {
-      id: "video-player",
-      title: "Google Drive Video Player",
-      category: "video",
-      description: "Stream Google Drive video files with HTML5 controls, custom poster thumbnails, and metadata extraction.",
-      code: `import { DriveVideo } from '@driveloader/react';
-
-export function HeroVideo() {
-  return (
-    <DriveVideo
-      src="https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs/view?type=video"
-      controls
-      autoPlay={false}
-      preload="metadata"
-      width={640}
-      height={360}
-    />
-  );
-}`,
-    },
-    {
-      id: "mixed-gallery",
-      title: "Mixed Media Gallery",
-      category: "gallery",
-      description: "Responsive grid layout that automatically renders images and videos side-by-side without manual configuration.",
-      code: `import { DriveGallery } from '@driveloader/react';
-
-export function MediaShowcase() {
-  return (
-    <DriveGallery
-      images={[
-        'https://drive.google.com/file/d/IMAGE_ID/view',
-        'https://drive.google.com/file/d/VIDEO_ID/view?type=video',
-      ]}
-      columns={{ sm: 1, md: 2, lg: 3 }}
-      gap="1.5rem"
-    />
-  );
-}`,
-    },
-    {
       id: "folder-loader",
-      title: "Public Folder Loading",
+      title: "Public Folder Explorer",
       category: "folder",
       description: "Fetch all images and videos from a public Google Drive folder using Google Drive API v3 with pagination.",
       code: `import { useDriveFolder, DriveImage } from '@driveloader/react';
 
 export function FolderView({ folderUrl, apiKey }: { folderUrl: string; apiKey: string }) {
-  const { folder, assets, loading, error, loadMore, hasMore } = useDriveFolder({
+  const { folder, assets, loading, loadMore, hasMore } = useDriveFolder({
     folderUrl,
     apiKey,
-    mediaTypes: ['image', 'video'],
+    mediaTypes: ['image', 'video', 'audio', 'document'],
     pageSize: 20,
   });
 
@@ -97,38 +183,20 @@ export function FolderView({ folderUrl, apiKey }: { folderUrl: string; apiKey: s
 }`,
     },
     {
-      id: "use-drive-video",
-      title: "Programmatic Video Hook",
-      category: "hooks",
-      description: "Access video resolution state, duration, width, height, mimeType, and thumbnail URLs directly in React components.",
-      code: `import { useDriveVideo } from '@driveloader/react';
+      id: "devtools-hud",
+      title: "Developer Debugger HUD (<DriveDebugOverlay />)",
+      subtitle: "On-screen debug panel for inspecting live cache hit rates, candidate probes, and resolution latency.",
+      category: "devtools",
+      description: "Expose real-time telemetry, cache hits, resolution latency, and candidate endpoints during development.",
+      code: `import { DriveDebugOverlay } from '@driveloader/react';
 
-export function VideoInfo({ driveUrl }: { driveUrl: string }) {
-  const { videoUrl, loading, error, metadata, thumbnailUrl } = useDriveVideo(driveUrl);
-
-  if (loading) return <div>Resolving video...</div>;
-  if (error) return <div>Failed to load: {error.message}</div>;
-
+export function App() {
   return (
-    <div>
-      <video src={videoUrl!} controls poster={thumbnailUrl || undefined} />
-      <p>Duration: {metadata?.duration}s | Dimensions: {metadata?.width}x{metadata?.height}</p>
-    </div>
+    <main>
+      <YourAppContent />
+      {process.env.NODE_ENV === 'development' && <DriveDebugOverlay />}
+    </main>
   );
-}`,
-    },
-    {
-      id: "cache-metrics",
-      title: "Cache Metrics Dashboard",
-      category: "cache",
-      description: "Inspect cache hits, misses, hit rate percentages, in-flight active requests, and memory usage estimates.",
-      code: `import { getCacheStats, clearCache } from '@driveloader/react';
-
-function LogStats() {
-  const stats = getCacheStats();
-  console.log(\`Cache Hit Rate: \${stats.hitRate}%\`);
-  console.log(\`Cached Items: \${stats.cachedEntries}\`);
-  console.log(\`Memory Estimate: \${stats.memoryUsageEstimate}\`);
 }`,
     },
   ];

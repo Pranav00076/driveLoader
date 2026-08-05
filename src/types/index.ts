@@ -109,7 +109,6 @@ export interface UrlDiagnostics {
   warnings: string[];
 }
 
-
 /**
  * Performance and usage metrics returned by getCacheStats.
  */
